@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'search/ast_helper'
 require 'elasticfusion/search/parser'
 
 class SearchParserTest < ActiveSupport::TestCase
@@ -110,27 +111,5 @@ class SearchParserTest < ActiveSupport::TestCase
 
     assert_equal field_term('stars', 'more than', '50'),
                  query('stars:      more than         50', [:stars])
-  end
-
-  # Helpers
-
-  def query(string, fields = [])
-    Elasticfusion::Search::Parser.new(string, fields).ast
-  end
-
-  def expression(op, left, right)
-    Elasticfusion::Search::Expression.new(op, left, right)
-  end
-
-  def term(body)
-    Elasticfusion::Search::Term.new(body)
-  end
-
-  def negated(body)
-    Elasticfusion::Search::NegatedClause.new(body)
-  end
-
-  def field_term(field, qualifier = nil, query)
-    Elasticfusion::Search::FieldTerm.new(field, qualifier, query)
   end
 end
