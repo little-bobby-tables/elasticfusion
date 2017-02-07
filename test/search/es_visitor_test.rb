@@ -14,7 +14,7 @@ class SearchESVisitorTest < ActiveSupport::TestCase
   end
 
   def from_ast(ast, main_field = :tags, mapping = {})
-    visitor(main_field, mapping).ast_to_es_query(ast)
+    visitor(main_field, mapping).accept(ast)
   end
 
   def visitor(main_field = :tags, mapping = {})

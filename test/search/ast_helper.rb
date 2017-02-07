@@ -6,6 +6,10 @@ def expression(op, left, right)
   Elasticfusion::Search::Expression.new(op, left, right)
 end
 
+def polyadic(op, children)
+  Elasticfusion::Search::PolyadicExpression.new(op, children)
+end
+
 def term(body)
   Elasticfusion::Search::Term.new(body)
 end
