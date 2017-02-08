@@ -3,7 +3,7 @@ require 'dummy_model'
 require 'search/ast_helper'
 require 'elasticfusion/search/visitors/es_visitor'
 
-class SearchESVisitorTest < ActiveSupport::TestCase
+class ESVisitorTest < ActiveSupport::TestCase
   MAPPING = DummyModel.properties
 
   test 'term' do

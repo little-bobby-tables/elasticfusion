@@ -2,7 +2,7 @@ require 'test_helper'
 require 'search/ast_helper'
 require 'elasticfusion/search/visitors/polyadic_tree_visitor'
 
-class SearchPolyadicTreeVisitorTest < ActiveSupport::TestCase
+class PolyadicTreeVisitorTest < ActiveSupport::TestCase
   test 'flattens right-leaning tree' do
     assert_equal polyadic(:and, [term('pearl'), term('ruby'), term('sapphire'), negated(term('amethyst'))]),
                  visitor.rewrite(expression(:and, term('pearl'),

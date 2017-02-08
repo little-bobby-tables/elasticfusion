@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'elasticfusion/search/lexer'
 
-class SearchLexerTest < ActiveSupport::TestCase
+class LexerTest < ActiveSupport::TestCase
   test 'matches safe strings' do
     assert_lex :safe_string,
                expected: 'safe string with - and _ and 20 17',

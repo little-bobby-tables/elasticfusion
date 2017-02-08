@@ -2,7 +2,7 @@ require 'test_helper'
 require 'search/ast_helper'
 require 'elasticfusion/search/parser'
 
-class SearchParserTest < ActiveSupport::TestCase
+class ParserTest < ActiveSupport::TestCase
   test 'single terms' do
     assert_equal term('peridot'),
                  query('peridot')
