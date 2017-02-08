@@ -112,4 +112,10 @@ class ParserTest < ActiveSupport::TestCase
     assert_equal field_term('stars', :gt, '50'),
                  query('stars:      more than         50', [:stars])
   end
+
+  test 'imbalanced parentheses' do
+    assert_raises Elasticfusion::Search::ImbalancedParenthesesError do
+      query('(peridot OR lapis lazuli')
+    end
+  end
 end

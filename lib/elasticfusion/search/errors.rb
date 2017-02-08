@@ -4,14 +4,8 @@ module Elasticfusion
     end
 
     class ImbalancedParenthesesError < StandardError
-      attr_reader :near
-
-      def initialize(near)
-        @near = near
-      end
-
       def message
-        "Imbalanced parentheses near #{near}"
+        'Imbalanced parentheses.'
       end
     end
 

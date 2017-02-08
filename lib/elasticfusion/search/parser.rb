@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'elasticfusion/search/lexer'
 require 'elasticfusion/search/ast'
+require 'elasticfusion/search/errors'
 
 module Elasticfusion
   module Search
@@ -89,8 +90,7 @@ module Elasticfusion
           if opening_parens == closing_parens
             body
           else
-            false
-            # imbalanced parentheses
+            raise ImbalancedParenthesesError
           end
         end
       end
