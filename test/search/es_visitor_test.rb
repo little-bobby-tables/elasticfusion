@@ -88,6 +88,13 @@ class SearchESVisitorTest < ActiveSupport::TestCase
                                           field_term(:stars, :gt, '50'))))
   end
 
+  test 'field terms' do
+    assert_equal({ bool: { should: [{ term: { date: date('a week ago') } },
+                                    { term: { stars: '50' } }] } },
+                 from_ast(expression(:or, field_term(:date, 'a week ago'),
+                                     field_term(:stars, '50'))))
+  end
+
   def from_ast(ast)
     visitor.accept(ast)
   end
