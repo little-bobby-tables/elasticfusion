@@ -12,6 +12,4 @@ require 'rails/all'
 
 require 'elasticfusion'
 
-require 'dummy_mapping'
-
 Minitest::Reporters.use!

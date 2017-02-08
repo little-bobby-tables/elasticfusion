@@ -1,7 +1,7 @@
 require 'active_record'
 require 'elasticsearch/model'
 
-class Model < ActiveRecord::Base
+class DummyModel < ActiveRecord::Base
   include Elasticsearch::Model
 
   __elasticsearch__.index_name 'test_models'

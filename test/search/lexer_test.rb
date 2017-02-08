@@ -44,7 +44,7 @@ class SearchLexerTest < ActiveSupport::TestCase
                source: '(safe string) with - and _ (and) 20 17 and (balanced)'
 
     assert_lex :string_with_balanced_parentheses,
-               expected: '(safe string) with - and _    ',
+               expected: '(safe string) with - and _',
                source: '(safe string) with - and _    '
 
     assert_lex :string_with_balanced_parentheses,
@@ -60,7 +60,7 @@ class SearchLexerTest < ActiveSupport::TestCase
     assert_lex :string_with_balanced_parentheses,
                expected: 'safe string with - and _ and 20 17',
                source: 'safe string with - and _ and 20 17 OR irrelevant part',
-               should_remain: ' OR irrelevant part'
+               should_remain: 'OR irrelevant part'
   end
 
   def assert_lex(action, expected:, source:, should_remain: '')

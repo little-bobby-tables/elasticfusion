@@ -10,7 +10,7 @@ module Elasticfusion
     class NegatedClause < Struct.new(:body)
     end
 
-    class FieldTerm < Struct.new(:field, :qualifier, :query)
+    class FieldTerm < Struct.new(:field, :qualifier, :value)
     end
 
     class Term < Struct.new(:body)

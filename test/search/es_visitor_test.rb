@@ -1,8 +1,11 @@
 require 'test_helper'
+require 'dummy_model'
 require 'search/ast_helper'
 require 'elasticfusion/search/visitors/es_visitor'
 
 class SearchESVisitorTest < ActiveSupport::TestCase
+  MAPPING = DummyModel.properties
+
   test 'term' do
     assert_equal({ term: { tags: 'peridot' } },
                  from_ast(term('peridot')))
@@ -78,11 +81,22 @@ class SearchESVisitorTest < ActiveSupport::TestCase
     assert_equal expected, from_ast(ast)
   end
 
-  def from_ast(ast, main_field = :tags, mapping = {})
-    visitor(main_field, mapping).accept(ast)
+  test 'range queries' do
+    assert_equal({ bool: { should: [{ range: { date: { lt: date('a week ago') } } },
+                                    { range: { stars: { gt: '50' } } }] } },
+                 from_ast(expression(:or, field_term(:date, :lt, 'a week ago'),
+                                          field_term(:stars, :gt, '50'))))
   end
 
-  def visitor(main_field = :tags, mapping = {})
-    Elasticfusion::Search::ESVisitor.new(keyword_field: main_field, mapping: mapping)
+  def from_ast(ast)
+    visitor.accept(ast)
+  end
+
+  def visitor
+    Elasticfusion::Search::ESVisitor.new(keyword_field: :tags, mapping: MAPPING)
+  end
+
+  def date(string)
+    Elasticfusion::Search::ESValueSanitizer.new(MAPPING).value(string, field: :date)
   end
 end
