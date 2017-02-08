@@ -1,36 +1,31 @@
-require 'elasticfusion/search/visitors/flat_tree_visitor'
+require 'elasticfusion/search/visitors/polyadic_tree_visitor'
 
 module Elasticfusion
   module Search
-    class ESVisitor < FlatTreeVisitor
+    class ESVisitor < PolyadicTreeVisitor
       def initialize(mapping:, keyword_field:)
         @mapping = mapping
         @keyword_field = keyword_field
       end
 
-      def visit_subtree(leaf)
-        if leaf.respond_to?(:map)
-          leaf.map { |n| visit(n) }
-        else
-          visit(leaf)
-        end
+      OPERATORS = { and: :must,
+                    or:  :should }.freeze
+
+      def visit_PolyadicExpression(node)
+        operator = OPERATORS[node.op]
+        operands = node.children.map { |n| visit(n) }
+
+        { bool: { operator => operands } }
       end
 
-      def visit_Expression(node)
-        left = visit_subtree(node.left)
-
-        if node.op
-          right = visit_subtree(node.right)
-
-          if node.op == :and
-            { bool: { must: [left, right].flatten }}
-          end
-          if node.op == :or
-            { bool: { should: [left, right].flatten }}
-          end
+      def visit_NegatedClause(node)
+        clause = if node.body.respond_to?(:op) && node.body.op == :and
+          node.body.children.map { |n| visit(n) }
         else
-          left
+          [visit(node.body)]
         end
+
+        { bool: { must_not: clause }}
       end
 
       def visit_Term(node)
