@@ -85,14 +85,14 @@ class SearchParserTest < ActiveSupport::TestCase
   end
 
   test 'field queries with a qualifier' do
-    assert_equal field_term('date', 'earlier than', '3 years ago'),
+    assert_equal field_term('date', :lt, '3 years ago'),
                  query('date:earlier than 3 years ago', [:date])
 
-    assert_equal field_term('stars', 'more than', '50'),
+    assert_equal field_term('stars', :gt, '50'),
                  query('stars: more than 50', [:stars])
 
-    assert_equal expression(:and, field_term('date', 'later than', '2016'),
-                            field_term('stars', 'less than', '10')),
+    assert_equal expression(:and, field_term('date', :gt, '2016'),
+                            field_term('stars', :lt, '10')),
                  query('date: later than 2016, stars: less than 10', [:date, :stars])
   end
 
@@ -106,10 +106,10 @@ class SearchParserTest < ActiveSupport::TestCase
                             expression(:and, term('pearl (blue diamond)'), term('pearl'))),
                  query('pearl ( yellow    diamond )      OR       (    pearl (blue diamond),        pearl    )')
 
-    assert_equal field_term('stars', 'more than', '50'),
+    assert_equal field_term('stars', :gt, '50'),
                  query('stars:more than50', [:stars])
 
-    assert_equal field_term('stars', 'more than', '50'),
+    assert_equal field_term('stars', :gt, '50'),
                  query('stars:      more than         50', [:stars])
   end
 end

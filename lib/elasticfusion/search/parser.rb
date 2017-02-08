@@ -28,7 +28,7 @@ module Elasticfusion
       #                          ;
       # parenthesized expression = "(" , expression , ")"
       #                          ;
-      # field term               = field , ":" , [ qualifier ] , safe string
+      # field term               = field , ":" , [ field qualifier ] , safe string
       #                          ;
       # term                     = quoted string
       #                          | string with balanced parentheses
@@ -99,9 +99,8 @@ module Elasticfusion
         field = match_field
 
         if field
-          skip :whitespace
+          qualifier = field_qualifier
 
-          qualifier = match :field_qualifier
           skip :whitespace if qualifier
 
           field_query = safe_string
@@ -114,6 +113,18 @@ module Elasticfusion
         string = quoted_string || string_with_balanced_parentheses
 
         Term.new string
+      end
+
+      FIELD_QUALIFIERS = { 'less than' => :lt,
+                           'more than' => :gt,
+                           'earlier than' => :lt,
+                           'later than' => :gt }.freeze
+
+      def field_qualifier
+        skip :whitespace
+
+        qualifier = match :field_qualifier
+        FIELD_QUALIFIERS[qualifier]
       end
     end
   end
