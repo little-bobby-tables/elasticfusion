@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'search/ast_helper'
+require 'ast_helper'
 
 class ParserTest < ActiveSupport::TestCase
   test 'single terms' do

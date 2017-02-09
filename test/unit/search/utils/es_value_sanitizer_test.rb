@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'search/ast_helper'
+require 'ast_helper'
 
 class ESValueSanitizerTest < ActiveSupport::TestCase
   S = Elasticfusion::Search::ESValueSanitizer
