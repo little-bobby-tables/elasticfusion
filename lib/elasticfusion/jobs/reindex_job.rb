@@ -1,16 +1,9 @@
 module Elasticfusion
   module Jobs
     class ReindexJob < ActiveJob::Base
-      queue_as do
-        queue = self.arguments.first
-        if queue.owner.premium?
-          :premium_videojobs
-        else
-          :videojobs
-        end
-      end
+      queue_as :indexing
 
-      def perform(model_class:, id:)
+      def perform(model_class, id)
         model_class.constantize.find(id).reindex_now
       end
     end

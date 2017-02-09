@@ -1,3 +1,5 @@
+require 'elasticfusion/jobs/reindex_job'
+
 module Elasticfusion
   module Model
     module Indexing
@@ -21,7 +23,7 @@ module Elasticfusion
           end
 
           def reindex_later
-            Elasticfusion::Jobs::ReindexJob.perform_later(model_class: self.class.to_s, id: self.id)
+            Elasticfusion::Jobs::ReindexJob.perform_later(self.class.to_s, self.id)
           end
 
           def reindex_now

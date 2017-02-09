@@ -2,59 +2,79 @@ require 'test_helper'
 require 'model/active_record_helper'
 
 class IndexingTest < ActiveSupport::TestCase
-  setup do
+  include ActiveJob::TestHelper
+
+  def setup_model_and_record(persisted: false, &block)
     @model = ar_model('IndexingTestModel')
+    if block_given?
+      Elasticfusion.define(@model, &block)
+    else
+      Elasticfusion.define(@model) { }
+    end
+    @record = @model.new
+    @record.save if persisted
   end
 
   test 'creates a document for new records' do
-    Elasticfusion.define(@model) { }
-    record = @model.new
+    setup_model_and_record
 
-    assert_method_call record.__elasticsearch__, :index_document do
-      record.save
+    assert_method_call @record.__elasticsearch__, :index_document do
+      @record.save
     end
   end
 
   test 'removes the document for deleted records' do
-    Elasticfusion.define(@model) { }
-    record = @model.create
+    setup_model_and_record persisted: true
 
-    assert_method_call record.__elasticsearch__, :delete_document do
-      record.destroy
+    assert_method_call @record.__elasticsearch__, :delete_document do
+      @record.destroy
     end
   end
 
   test 'reindexes records on update with :reindex_when_updated enabled' do
-    Elasticfusion.define(@model) do
+    setup_model_and_record persisted: true do
       elasticfusion { reindex_when_updated [:attr] }
     end
-    record = @model.create
 
-    assert_method_call record, :reindex_later do
-      record.attr = 1
-      record.save
+    assert_method_call @record, :reindex_later do
+      @record.attr = 1
+      @record.save
     end
   end
 
   test 'does not reindex records on update with :reindex_when_updated disabled' do
-    Elasticfusion.define(@model) { }
-    record = @model.create
+    setup_model_and_record persisted: true
 
-    refute_method_call record, :reindex_later do
-      record.attr = 1
-      record.save
+    refute_method_call @record, :reindex_later do
+      @record.attr = 1
+      @record.save
     end
   end
 
   test 'does not reindex records when :reindex_when_updated excludes the changed attribute' do
-    Elasticfusion.define(@model) do
+    setup_model_and_record persisted: true do
       elasticfusion { reindex_when_updated [:some_other_attr] }
     end
-    record = @model.create
 
-    refute_method_call record, :reindex_later do
-      record.attr = 1
-      record.save
+    refute_method_call @record, :reindex_later do
+      @record.attr = 1
+      @record.save
+    end
+  end
+
+  test '#reindex_later enqueues an indexing job' do
+    setup_model_and_record
+
+    assert_enqueued_with(job: Elasticfusion::Jobs::ReindexJob, args: [@model.name, @record.id]) do
+      @record.reindex_later
+    end
+  end
+
+  test '#reindex_now updates the document' do
+    setup_model_and_record
+
+    assert_method_call @record.__elasticsearch__, :index_document do
+      @record.reindex_now
     end
   end
 end
