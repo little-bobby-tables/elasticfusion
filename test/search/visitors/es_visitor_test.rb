@@ -1,10 +1,23 @@
 require 'test_helper'
-require 'dummy_model'
 require 'search/ast_helper'
 require 'elasticfusion/search/visitors/es_visitor'
 
 class ESVisitorTest < ActiveSupport::TestCase
-  MAPPING = DummyModel.properties
+  class TestModel < ActiveRecord::Base
+    include Elasticsearch::Model
+
+    settings index: { number_of_shards: 1 } do
+      mappings dynamic: false, _source: { enabled: false }, _all: { enabled: false } do
+        indexes :tags, type: 'keyword'
+        indexes :stars, type: 'integer'
+        indexes :date, type: 'date'
+      end
+    end
+
+    def self.mapping
+      __elasticsearch__.mapping.to_hash[__elasticsearch__.document_type.to_sym][:properties]
+    end
+  end
 
   test 'term' do
     assert_equal({ term: { tags: 'peridot' } },
@@ -100,10 +113,10 @@ class ESVisitorTest < ActiveSupport::TestCase
   end
 
   def visitor
-    Elasticfusion::Search::ESVisitor.new(keyword_field: :tags, mapping: MAPPING)
+    Elasticfusion::Search::ESVisitor.new(keyword_field: :tags, mapping: TestModel.mapping)
   end
 
   def date(string)
-    Elasticfusion::Search::ESValueSanitizer.new(MAPPING).value(string, field: :date)
+    Elasticfusion::Search::ESValueSanitizer.new(TestModel.mapping).value(string, field: :date)
   end
 end

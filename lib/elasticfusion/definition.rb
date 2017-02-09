@@ -1,20 +1,13 @@
 require 'elasticfusion/model/settings'
-require 'elasticfusion/model/class_extensions'
-require 'elasticfusion/model/instance_extensions'
+require 'elasticfusion/model/indexing'
+require 'elasticfusion/model/searching'
+
+require 'elasticsearch/model'
 
 module Elasticfusion
   def self.define(cls, &block)
     cls.class_eval do
-      include Model::InstanceExtensions
-      extend Model::ClassExtensions
-
-      after_commit(on: :create) do
-        __elasticsearch__.index_document
-      end
-
-      after_commit(on: :destroy) do
-        __elasticsearch__.delete_document
-      end
+      include Elasticsearch::Model
 
       def self.elasticfusion(&block)
         @_elasticfusion_settings ||= Model::Settings.new
@@ -27,5 +20,12 @@ module Elasticfusion
     end
 
     cls.class_eval(&block)
+
+    # Model extensions may rely on settings set with a block,
+    # include them after evaluating the latter.
+    cls.class_eval do
+      include Model::Indexing
+      include Model::Searching
+    end
   end
 end

@@ -1,11 +1,11 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-# require 'simplecov'
-# SimpleCov.start do
-#   add_filter 'test'
-# end
-#
+require 'simplecov'
+SimpleCov.start do
+  add_filter 'test'
+end
 
+require 'minitest/mock'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'rails/all'
@@ -13,3 +13,12 @@ require 'rails/all'
 require 'elasticfusion'
 
 Minitest::Reporters.use!
+
+def assert_method_call(obj, method)
+  mock = MiniTest::Mock.new
+  mock.expect :call, nil
+  obj.stub method, mock do
+    yield
+  end
+  mock.verify
+end

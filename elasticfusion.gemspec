@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'elasticsearch-rails'
   spec.add_runtime_dependency 'elasticsearch-model'
 
+  spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'minitest-reporters'
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'codeclimate-test-reporter'

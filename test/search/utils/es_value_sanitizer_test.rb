@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'dummy_model'
 require 'search/ast_helper'
 
 require 'elasticfusion/search/utils/es_value_sanitizer'

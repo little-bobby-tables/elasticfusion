@@ -1,19 +1,22 @@
 require 'test_helper'
 
-class Model < ActiveRecord::Base
-end
-
 class DefinitionTest < ActiveSupport::TestCase
   test 'adds model extensions' do
-    Elasticfusion.define(Model) { }
+    @class = Class.new(ActiveRecord::Base)
 
-    assert_includes Model.ancestors, Elasticfusion::Model::InstanceExtensions
-    assert_includes Model.singleton_class.ancestors, Elasticfusion::Model::ClassExtensions
+    Elasticfusion.define(@class) { }
+
+    assert_includes @class.ancestors, Elasticsearch::Model
+    assert_includes @class.ancestors, Elasticfusion::Model::Indexing
+    assert_includes @class.ancestors, Elasticfusion::Model::Searching
   end
 
   test 'defines model settings with a block' do
-    Elasticfusion.define(Model) do
-      if self != Model
+    class TestModel < ActiveRecord::Base
+    end
+
+    Elasticfusion.define(TestModel) do
+      if self != TestModel
         raise Minitest::Assertion, 'self is expected to be the model class inside settings block.'
       end
 
@@ -22,6 +25,6 @@ class DefinitionTest < ActiveSupport::TestCase
       end
     end
 
-    assert_equal :tags, Model.elasticfusion[:keyword_field]
+    assert_equal :tags, TestModel.elasticfusion[:keyword_field]
   end
 end

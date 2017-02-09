@@ -1,7 +1,7 @@
 module Elasticfusion
   module Model
-    module ClassExtensions
-      def search_by_query(query)
+    module Searching
+      def self.included(model)
 
       end
     end

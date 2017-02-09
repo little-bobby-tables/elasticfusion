@@ -9,6 +9,10 @@ module Elasticfusion
         hash[:keyword_field] = field
       end
 
+      def reindex_when_updated(attributes)
+        hash[:reindex_when_updated] = attributes
+      end
+
       def hash
         @hash ||= {}
       end
