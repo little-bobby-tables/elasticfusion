@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'elasticfusion/search/lexer'
 
 class LexerTest < ActiveSupport::TestCase
   test 'matches safe strings' do

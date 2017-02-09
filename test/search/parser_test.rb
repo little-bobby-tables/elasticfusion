@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'search/ast_helper'
-require 'elasticfusion/search/parser'
 
 class ParserTest < ActiveSupport::TestCase
   test 'single terms' do
