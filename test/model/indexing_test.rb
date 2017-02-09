@@ -24,5 +24,37 @@ class IndexingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'reindexes records on update with :reindex_when_updated enabled' do
+    Elasticfusion.define(@model) do
+      elasticfusion { reindex_when_updated [:attr] }
+    end
+    record = @model.create
 
+    assert_method_call record, :reindex_later do
+      record.attr = 1
+      record.save
+    end
+  end
+
+  test 'does not reindex records on update with :reindex_when_updated disabled' do
+    Elasticfusion.define(@model) { }
+    record = @model.create
+
+    refute_method_call record, :reindex_later do
+      record.attr = 1
+      record.save
+    end
+  end
+
+  test 'does not reindex records when :reindex_when_updated excludes the changed attribute' do
+    Elasticfusion.define(@model) do
+      elasticfusion { reindex_when_updated [:some_other_attr] }
+    end
+    record = @model.create
+
+    refute_method_call record, :reindex_later do
+      record.attr = 1
+      record.save
+    end
+  end
 end

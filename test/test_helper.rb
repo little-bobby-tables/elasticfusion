@@ -5,20 +5,13 @@ SimpleCov.start do
   add_filter 'test'
 end
 
-require 'minitest/mock'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'rails/all'
+
+require 'mock_helper'
 
 require 'elasticfusion'
 
 Minitest::Reporters.use!
 
-def assert_method_call(obj, method)
-  mock = MiniTest::Mock.new
-  mock.expect :call, nil
-  obj.stub method, mock do
-    yield
-  end
-  mock.verify
-end

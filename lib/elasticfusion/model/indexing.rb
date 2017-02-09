@@ -13,7 +13,8 @@ module Elasticfusion
 
           if elasticfusion[:reindex_when_updated]
             after_commit(on: :update) do |record|
-              if (record.previous_changes.keys & elasticfusion[:reindex_when_updated]).any?
+              if (record.previous_changes.keys.map(&:to_sym) &
+                  record.class.elasticfusion[:reindex_when_updated]).any?
                 record.reindex_later
               end
             end

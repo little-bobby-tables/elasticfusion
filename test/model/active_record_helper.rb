@@ -7,7 +7,9 @@ def ar_model(name)
 
   unless ActiveRecord::Base.connection.data_sources.include? table
     ActiveRecord::Schema.define(version: 1) do
-      create_table table
+      create_table table do |t|
+        t.integer :attr
+      end
     end
   end
 
