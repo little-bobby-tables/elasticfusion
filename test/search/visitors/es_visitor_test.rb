@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'search/ast_helper'
-require 'elasticfusion/search/visitors/es_visitor'
 
 class ESVisitorTest < ActiveSupport::TestCase
   class TestModel < ActiveRecord::Base
@@ -113,7 +112,7 @@ class ESVisitorTest < ActiveSupport::TestCase
   end
 
   def visitor
-    Elasticfusion::Search::ESVisitor.new(keyword_field: :tags, mapping: TestModel.mapping)
+    Elasticfusion::Search::ESVisitor.new(:tags, TestModel.mapping)
   end
 
   def date(string)

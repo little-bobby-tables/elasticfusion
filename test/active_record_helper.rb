@@ -8,7 +8,7 @@ def ar_model(name)
   unless ActiveRecord::Base.connection.data_sources.include? table
     ActiveRecord::Schema.define(version: 1) do
       create_table table do |t|
-        t.integer :attr
+        yield t if block_given?
       end
     end
   end

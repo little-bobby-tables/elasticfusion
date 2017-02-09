@@ -16,9 +16,9 @@ module Elasticfusion
         string_with_balanced_parentheses_until: /,|OR|NOT/
       }
 
-      def initialize(string, queryable_fields)
+      def initialize(string, searchable_fields)
         @scanner = StringScanner.new(string)
-        @field_regex = /(#{queryable_fields.join('|')}):/ if queryable_fields.any?
+        @field_regex = /(#{searchable_fields.join('|')}):/ if searchable_fields.any?
       end
 
       def match(token)

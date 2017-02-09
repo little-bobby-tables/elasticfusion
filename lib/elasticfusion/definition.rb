@@ -1,4 +1,4 @@
-require 'elasticfusion/model/settings'
+require 'elasticfusion/model/model_settings'
 require 'elasticfusion/model/indexing'
 require 'elasticfusion/model/searching'
 
@@ -10,12 +10,9 @@ module Elasticfusion
       include Elasticsearch::Model
 
       def self.elasticfusion(&block)
-        @_elasticfusion_settings ||= Model::Settings.new
-        if block_given?
-          @_elasticfusion_settings.instance_eval(&block)
-        else
-          @_elasticfusion_settings
-        end
+        @elasticfusion ||= Model::ModelSettings.new(self)
+        @elasticfusion.configure_with_block(&block) if block_given?
+        @elasticfusion
       end
     end
 

@@ -5,7 +5,7 @@ require 'elasticfusion/search/errors'
 module Elasticfusion
   module Search
     class ESVisitor < PolyadicTreeVisitor
-      def initialize(mapping:, keyword_field:)
+      def initialize(keyword_field, mapping)
         @keyword_field = keyword_field
         @sanitizer = ESValueSanitizer.new(mapping)
       end

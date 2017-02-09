@@ -1,8 +1,6 @@
 require 'test_helper'
 require 'search/ast_helper'
 
-require 'elasticfusion/search/utils/es_value_sanitizer'
-
 class ESValueSanitizerTest < ActiveSupport::TestCase
   S = Elasticfusion::Search::ESValueSanitizer
 

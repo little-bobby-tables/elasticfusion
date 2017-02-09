@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'search/ast_helper'
-require 'elasticfusion/search/visitors/polyadic_tree_visitor'
 
 class PolyadicTreeVisitorTest < ActiveSupport::TestCase
   test 'flattens right-leaning tree' do

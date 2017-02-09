@@ -6,8 +6,8 @@ require 'elasticfusion/search/errors'
 module Elasticfusion
   module Search
     class Parser
-      def initialize(query, queryable_fields = [])
-        @lexer = Lexer.new(query, queryable_fields)
+      def initialize(query, searchable_fields = [])
+        @lexer = Lexer.new(query, searchable_fields)
       end
 
       delegate :match, :skip,
