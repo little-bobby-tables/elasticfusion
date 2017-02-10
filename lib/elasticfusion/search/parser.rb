@@ -14,7 +14,9 @@ module Elasticfusion
                :match_field, :left_parentheses, :right_parentheses,
                :safe_string, :quoted_string, :string_with_balanced_parentheses, to: :@lexer
 
-      # ast                      = conjunction
+      # TODO FIXME: NOT > AND > OR
+
+      # query                    = conjunction
       #                          ;
       # conjunction              = disjunction , [ "," , conjunction ]
       #                          ;

@@ -1,30 +1,15 @@
 module Elasticfusion
   module Model
     class ModelSettings
+      delegate :[], :values_at, to: :@settings
+
       def initialize(model)
         @model = model
         @settings = {}
       end
 
       def configure_with_block(&block)
-        @settings = DSL.build_settings_hash(&block)
-      end
-
-      def [](key)
-        @settings[key]
-      end
-
-      def mapping
-        @model.__elasticsearch__.mapping.to_hash[
-          @model.__elasticsearch__.document_type.to_sym][:properties]
-      end
-
-      def searchable_mapping
-        if self[:allowed_search_fields]
-          mapping.select { |field, _| self[:allowed_search_fields].include? field }
-        else
-          mapping
-        end
+        @settings.merge! DSL.build_settings_hash(&block)
       end
 
       class DSL
@@ -36,12 +21,20 @@ module Elasticfusion
           @settings ||= {}
         end
 
-        OPTIONS = [:allowed_search_fields, :keyword_field, :reindex_when_updated]
+        def keyword_field(field)
+          settings[:keyword_field] = field
+        end
 
-        OPTIONS.each do |opt|
-          define_method opt do |val|
-            settings[opt] = val
-          end
+        def allowed_search_fields(ary)
+          settings[:allowed_search_fields] = ary
+        end
+
+        def default_query(query)
+          settings[:default_query] = query
+        end
+
+        def reindex_when_updated(attributes)
+          settings[:reindex_when_updated] = attributes
         end
       end
     end

@@ -21,15 +21,15 @@ module Elasticfusion
               end
             end
           end
-
-          def reindex_later
-            Elasticfusion::Jobs::ReindexJob.perform_later(self.class.to_s, self.id)
-          end
-
-          def reindex_now
-            __elasticsearch__.index_document
-          end
         end
+      end
+
+      def reindex_later
+        Elasticfusion::Jobs::ReindexJob.perform_later(self.class.to_s, self.id)
+      end
+
+      def reindex_now
+        __elasticsearch__.index_document
       end
     end
   end
