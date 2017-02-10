@@ -10,8 +10,25 @@ module Elasticfusion
       @mapping = searchable_mapping
       @keyword_field = keyword_field
 
+      @size = 10
+
       parse_query(query) if query
       instance_eval(&block) if block_given?
+    end
+
+    def size(size)
+      @size = size
+    end
+
+    def sort_by(sort)
+      (@sort_by ||= []) << sort
+    end
+
+    def perform
+      self.search query: { bool: { must: searchable_options.queries } },
+                  filter: { bool: { must: searchable_options.filters } },
+                  sort: sorts,
+                  size: @size
     end
 
     def parse_query(query)

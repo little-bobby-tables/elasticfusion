@@ -74,7 +74,7 @@ module Elasticfusion
       end
 
       def boolean_clause
-        negation = match :negation
+        negation = match :not
         skip :whitespace
 
         if negation

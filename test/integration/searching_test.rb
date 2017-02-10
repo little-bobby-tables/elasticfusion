@@ -18,4 +18,9 @@ class SearchingTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test 'search by query' do
+    search = @model.search_by_query('peridot, lapis lazuli, date: less than a month ago, score: 50')
+
+  end
 end

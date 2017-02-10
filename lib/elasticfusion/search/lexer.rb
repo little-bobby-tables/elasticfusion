@@ -8,7 +8,7 @@ module Elasticfusion
         whitespace: /\s+/,
         and: /,/,
         or: /OR/,
-        negation: /NOT/,
+        not: /NOT/,
         field_query_delimiter: /:/,
         field_qualifier: /less than|more than|earlier than|later than/,
 
