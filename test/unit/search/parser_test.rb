@@ -30,11 +30,16 @@ class ParserTest < ActiveSupport::TestCase
     assert_equal expression(:and, term('pearl'), expression(:or, term('ruby'), term('sapphire'))),
                  query('pearl, ruby OR sapphire')
 
-    assert_equal expression(:and, negated(term('pearl')), negated(term('ruby'))),
-                 query('NOT pearl, NOT ruby')
+    assert_equal expression(:and, expression(:or, term('pearl'), term('ruby')), term('sapphire')),
+                 query('pearl OR ruby, sapphire')
 
-    assert_equal expression(:or, negated(term('pearl')), negated(term('ruby'))),
-                 query('NOT pearl OR NOT ruby')
+    assert_equal expression(:and, negated(term('pearl')), expression(:or, negated(term('ruby')),
+                                                                          negated(term('sapphire')))),
+                 query('NOT pearl, NOT ruby OR NOT sapphire')
+
+    assert_equal expression(:and, expression(:or, negated(term('pearl')), negated(term('ruby'))),
+                                  negated(term('sapphire'))),
+                 query('NOT pearl OR NOT ruby, NOT sapphire')
   end
 
   test 'parenthesized expressions' do

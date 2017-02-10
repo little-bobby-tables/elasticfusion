@@ -6,7 +6,8 @@ module Elasticfusion
     class Lexer
       TOKENS = {
         whitespace: /\s+/,
-        binary_operator: /,|OR/,
+        and: /,/,
+        or: /OR/,
         negation: /NOT/,
         field_query_delimiter: /:/,
         field_qualifier: /less than|more than|earlier than|later than/,
