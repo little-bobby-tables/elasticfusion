@@ -4,6 +4,9 @@ require 'elasticfusion/search/visitors/es_visitor'
 # An instance of this class represents a single search.
 # It encapsulates all custom search features (advanced query parsing,
 # query building, etc.)
+
+# Think of it as a light version of https://github.com/elastic/elasticsearch-ruby/tree/master/elasticsearch-dsl,
+# tailored to our specific needs.
 module Elasticfusion
   class CustomSearch
     def initialize(model, query = nil, &block)
