@@ -11,11 +11,11 @@ module Elasticfusion
   class CustomSearch
     def initialize(model, query = nil, &block)
       @mapping = searchable_mapping(model)
-      @keyword_field, default_query, default_sort = model.elasticfusion.values_at(
-        :keyword_field, :default_query, :default_sort)
       @searchable_fields = @mapping.keys
+      @keyword_field = model.elasticfusion[:keyword_field]
 
-      @builder = QueryBuilder.new(default_query, default_sort)
+      @builder = QueryBuilder.new(*model.elasticfusion.values_at(
+        :default_query, :default_sort, :allowed_sort_fields))
       parse_query(query) if query
       @builder.instance_eval(&block) if block_given?
     end
@@ -51,9 +51,10 @@ module Elasticfusion
     private
 
     class QueryBuilder
-      def initialize(default_query, default_sort)
+      def initialize(default_query, default_sort, allowed_sort_fields)
         @default_query = default_query || { match_all: {} }
         @default_sort = default_sort || {}
+        @allowed_sort_fields = allowed_sort_fields
         @queries, @filters, @sorts = [], [], []
       end
 
@@ -65,8 +66,10 @@ module Elasticfusion
         @filters << query
       end
 
-      def sort_by(sort)
-        @sorts << sort
+      def sort_by(field, direction)
+        raise Search::UnknownSortFieldError.new(field) if @allowed_sort_fields.exclude? field
+        raise Search::InvalidSortOrderError if %w(desc asc).exclude? direction.to_s
+        @sorts << { field => direction }
       end
 
       def queries

@@ -1,4 +1,3 @@
-require 'elasticfusion/search/errors'
 require 'chronic'
 
 module Elasticfusion

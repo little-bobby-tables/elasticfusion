@@ -5,7 +5,11 @@ module Elasticfusion
 
       def initialize(model)
         @model = model
-        @settings = {}
+
+        # Default settings.
+        @settings = {
+          allowed_sort_fields: []
+        }
       end
 
       def configure_with_block(&block)
@@ -27,6 +31,10 @@ module Elasticfusion
 
         def allowed_search_fields(ary)
           settings[:allowed_search_fields] = ary
+        end
+
+        def allowed_sort_fields(ary)
+          settings[:allowed_sort_fields] = ary.map(&:to_s)
         end
 
         def default_query(query)

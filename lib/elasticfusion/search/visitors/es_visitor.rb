@@ -1,6 +1,5 @@
 require 'elasticfusion/search/visitors/polyadic_tree_visitor'
 require 'elasticfusion/search/utils/es_value_sanitizer'
-require 'elasticfusion/search/errors'
 
 module Elasticfusion
   module Search

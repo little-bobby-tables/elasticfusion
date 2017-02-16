@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require 'elasticfusion/search/lexer'
 require 'elasticfusion/search/ast'
-require 'elasticfusion/search/errors'
 
 module Elasticfusion
   module Search
