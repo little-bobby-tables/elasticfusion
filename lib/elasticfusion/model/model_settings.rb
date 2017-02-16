@@ -33,6 +33,10 @@ module Elasticfusion
           settings[:default_query] = query
         end
 
+        def default_sort(sort)
+          settings[:default_sort] = sort
+        end
+
         def reindex_when_updated(attributes)
           settings[:reindex_when_updated] = attributes
         end
