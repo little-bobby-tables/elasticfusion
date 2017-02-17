@@ -9,20 +9,6 @@ module Elasticfusion
       end
     end
 
-    class FieldError < SearchError
-      attr_reader :field
-
-      def initialize(field)
-        @field = field
-      end
-    end
-
-    class UnknownFieldError < FieldError
-      def message
-        "\"#{field}\" is not a searchable field."
-      end
-    end
-
     class InvalidFieldValueError < SearchError
       attr_reader :field, :value
 
@@ -37,6 +23,12 @@ module Elasticfusion
     end
 
     class UnknownSortFieldError < FieldError
+      attr_reader :field
+
+      def initialize(field)
+        @field = field
+      end
+
       def message
         "\"#{field}\" is not a sortable field."
       end

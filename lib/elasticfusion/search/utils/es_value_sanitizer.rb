@@ -8,8 +8,6 @@ module Elasticfusion
       end
 
       def value(value, field:)
-        raise UnknownFieldError.new(field) if @mapping[field.to_sym].nil?
-
         case @mapping[field.to_sym][:type]
           when 'keyword'
             value

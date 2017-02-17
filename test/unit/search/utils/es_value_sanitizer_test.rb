@@ -34,12 +34,4 @@ class ESValueSanitizerTest < ActiveSupport::TestCase
     assert_equal :stars, e.field
     assert_equal 'not a number', e.value
   end
-
-  test 'raises an error for unknown fields' do
-    e = assert_raises Elasticfusion::Search::UnknownFieldError do
-      S.new({}).value('1', field: :tags)
-    end
-
-    assert_equal :tags, e.field
-  end
 end
