@@ -3,7 +3,7 @@ module Elasticfusion
     class SearchError < StandardError
     end
 
-    class ImbalancedParenthesesError < StandardError
+    class ImbalancedParenthesesError < SearchError
       def message
         'Imbalanced parentheses.'
       end
