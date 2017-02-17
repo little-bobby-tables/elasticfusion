@@ -67,7 +67,7 @@ module Elasticfusion
       end
 
       def sort_by(field, direction)
-        raise Search::UnknownSortFieldError.new(field) if @allowed_sort_fields.exclude? field
+        raise Search::UnknownSortFieldError.new(field) if @allowed_sort_fields.exclude? field.to_s
         raise Search::InvalidSortOrderError if %w(desc asc).exclude? direction.to_s
         @sorts << { field => direction }
       end

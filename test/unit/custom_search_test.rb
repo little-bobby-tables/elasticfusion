@@ -29,6 +29,9 @@ class CustomSearchTest < ActiveSupport::TestCase
     sorts = search_body('pearl') { |s| s.sort_by('stars', 'desc') }[:sort]
     assert_includes sorts, { 'stars' => 'desc' }
 
+    sorts = search_body('pearl') { |s| s.sort_by(:stars, :desc) }[:sort]
+    assert_includes sorts, { stars: :desc }
+
     e = assert_raises Elasticfusion::Search::UnknownSortFieldError do
       search_body('pearl') { |s| s.sort_by('decidedly_not_stars', 'desc') }
     end
