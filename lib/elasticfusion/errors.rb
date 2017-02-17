@@ -22,7 +22,7 @@ module Elasticfusion
       end
     end
 
-    class UnknownSortFieldError < FieldError
+    class UnknownSortFieldError < SearchError
       attr_reader :field
 
       def initialize(field)
