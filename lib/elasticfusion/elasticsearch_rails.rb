@@ -1,5 +1,5 @@
 module Elasticfusion
-  module ElasticsearchActiveRecordMemoization
+  module ElasticsearchActiveRecordPatch
     # https://github.com/elastic/elasticsearch-rails/issues/608,
     # might be related to https://github.com/elastic/elasticsearch-rails/issues/258,
     # though in my experience it only affects Rails 5+.
@@ -9,4 +9,4 @@ module Elasticfusion
   end
 end
 
-Elasticsearch::Model::Adapter::ActiveRecord::Records.prepend Elasticfusion::ElasticsearchActiveRecordMemoization
+Elasticsearch::Model::Adapter::ActiveRecord::Records.prepend Elasticfusion::ElasticsearchActiveRecordPatch
