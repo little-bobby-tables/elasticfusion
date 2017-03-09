@@ -25,6 +25,10 @@ module Elasticfusion
           @settings ||= {}
         end
 
+        def scopes
+          settings[:scopes] = yield
+        end
+
         def keyword_field(field)
           settings[:keyword_field] = field
         end

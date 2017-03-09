@@ -16,7 +16,7 @@ module Elasticfusion
       @keyword_field = model.elasticfusion[:keyword_field]
 
       @builder = QueryBuilder.new(*model.elasticfusion.values_at(
-        :default_query, :default_sort, :allowed_sort_fields))
+        :scopes, :default_query, :default_sort, :allowed_sort_fields))
       parse_query(query) if query
       @builder.instance_eval(&block) if block_given?
     end
@@ -52,7 +52,8 @@ module Elasticfusion
     private
 
     class QueryBuilder
-      def initialize(default_query, default_sort, allowed_sort_fields)
+      def initialize(scopes, default_query, default_sort, allowed_sort_fields)
+        @scopes = scopes || {}
         @default_query = default_query || { match_all: {} }
         @default_sort = default_sort || {}
         @allowed_sort_fields = allowed_sort_fields
@@ -65,6 +66,13 @@ module Elasticfusion
 
       def filter(query)
         @filters << query
+      end
+
+      def scope(scope, *args)
+        scope = @scopes[scope]
+        raise ArgumentError, "Unknown scope #{scope}" if scope.nil?
+
+        @filters << scope.call(*args)
       end
 
       def sort_by(field, direction)

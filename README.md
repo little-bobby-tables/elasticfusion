@@ -5,8 +5,7 @@ Elasticfusion provides additional functionality on top of [*elasticsearch-rails*
 It includes:
 * a keyword-based search language supporting boolean expressions
 (conjunction, disjunction, negation) and field queries (range);
-* background jobs to carry out index updates;
-* test extensions.
+* background jobs to carry out index updates.
 
 It was written with a specific use case in mind and as such places a 
 number of restrictions on the allowed use of Elasticsearch.
@@ -30,7 +29,7 @@ in general is encouraged to be disabled.
 ### Usage examples
 
 Elasticfusion was written specifically for [fanuniverse](https://www.github.com/little-bobby-tables/fanuniverse).
-Refer to it for real-world usage examples. 
+Refer to it for real-world usage examples.
 
 ### Aknowledgements
 

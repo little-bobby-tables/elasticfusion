@@ -2,6 +2,32 @@ require 'test_helper'
 require 'active_record_helper'
 
 class CustomSearchTest < ActiveSupport::TestCase
+  test ':scopes' do
+    model do
+      allowed_search_fields [:stars]
+      scopes do
+        {
+          starstruck:     ->            { { term: { stars: 1 } } },
+          stars:          ->(val)       { { term: { stars: val } } },
+          stars_in_range: ->(qual, val) { { range: { stars: { qual => val } } } }
+        }
+      end
+    end
+
+    filter = search_body { |s| s.scope(:starstruck) }[:query][:bool][:filter]
+    assert_includes filter, { term: { stars: 1 } }
+
+    filter = search_body { |s| s.scope(:stars, 42) }[:query][:bool][:filter]
+    assert_includes filter, { term: { stars: 42 } }
+
+    filter = search_body { |s| s.scope(:stars_in_range, :lt, 2) }[:query][:bool][:filter]
+    assert_includes filter, { range: { stars: { lt: 2 } } }
+
+    assert_raises ArgumentError do
+      search_body { |s| s.scope(:theres_no_such_scope) }
+    end
+  end
+
   test ':allowed_search_fields' do
     model { allowed_search_fields [:stars] }
 

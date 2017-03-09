@@ -19,6 +19,14 @@ class SearchingTest < ActiveSupport::TestCase
 
       elasticfusion do
         keyword_field :tags
+
+        scopes do
+          {
+            tag_expression: ->            { { bool: { must: [{ term: { tags: 'lapis lazuli' } },
+                                                             { term: { tags: 'peridot' } }] } } },
+            stars_in_range: ->(qual, val) { { range: { stars: { qual => val } } } }
+          }
+        end
       end
 
       after_commit(on: :create) do
@@ -48,7 +56,7 @@ class SearchingTest < ActiveSupport::TestCase
     record = @model.create tags: ['peridot', 'lapis lazuli'], stars: 50, date: 1.day.ago
 
     search = @model.custom_search do |s|
-      s.query term: { tags: 'lapis lazuli' }
+      s.scope :tag_expression
       s.filter range: { stars: { lt: 100 } }
     end
     assert_equal record, search.records.first
@@ -64,12 +72,12 @@ class SearchingTest < ActiveSupport::TestCase
     record = @model.create tags: ['peridot', 'lapis lazuli'], stars: 100, date: 2.days.ago
 
     search = @model.search_by_query('peridot, date: earlier than a day ago') do |s|
-      s.filter range: { stars: { lte: 100 } }
+      s.scope :stars_in_range, :lte, 100
     end
     assert_equal record, search.records.first
 
     search = @model.search_by_query('peridot, date: earlier than a day ago') do |s|
-      s.filter range: { stars: { lt: 100 } }
+      s.scope :stars_in_range, :lt, 100
     end
     assert_empty search.records
   end
