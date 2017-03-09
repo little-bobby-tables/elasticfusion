@@ -20,12 +20,12 @@ in general is encouraged to be disabled.
 
 ### Setup
 
-1) Place your index definitions in *app/indexes* directory.
+1. Place your index definitions in *app/indexes* directory.
 
-2) Drop `Elasticfusion.load_index_definitions` in *app/models/application_record.rb* 
+2. Drop `Elasticfusion.load_index_definitions` in *app/models/application_record.rb* 
 (or any autoloaded file, really).
 
-3) Add `indexing` queue to your Active Job backend.
+3. Add `indexing` queue to your Active Job backend.
 
 ### Usage examples
 
