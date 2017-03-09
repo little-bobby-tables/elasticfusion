@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'elasticfusion/model/model_settings'
 require 'elasticfusion/model/indexing'
 require 'elasticfusion/model/searching'

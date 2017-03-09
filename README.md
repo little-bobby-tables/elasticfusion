@@ -18,6 +18,20 @@ in general is encouraged to be disabled.
 * Rails 5
 * Elasticsearch 5
 
+### Setup
+
+1) Place your index definitions in *app/indexes* directory.
+
+2) Drop `Elasticfusion.load_index_definitions` in *app/models/application_record.rb* 
+(or any autoloaded file, really).
+
+3) Add `indexing` queue to your Active Job backend.
+
+### Usage examples
+
+Elasticfusion was written specifically for [fanuniverse](https://www.github.com/little-bobby-tables/fanuniverse).
+Refer to it for real-world usage examples. 
+
 ### Aknowledgements
 
 This gem was largely inspired by search handling in *booru-on-rails* ([Derpibooru](https://www.derpibooru.org)). 

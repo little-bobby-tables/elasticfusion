@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'elasticfusion/search/parser'
 require 'elasticfusion/search/visitors/es_visitor'
 
