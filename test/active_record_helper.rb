@@ -17,6 +17,6 @@ def ar_model(name)
   Object.send(:remove_const, name) if Object.constants.include?(name)
 
   Object.const_set(name, Class.new(ActiveRecord::Base)).tap do |m|
-    m.delete_all # reset records from other tests
+    m.delete_all # reset records created by previous tests
   end
 end
