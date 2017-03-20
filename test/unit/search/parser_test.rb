@@ -27,18 +27,20 @@ class ParserTest < ActiveSupport::TestCase
   end
 
   test 'operator precedence and associativity' do
-    assert_equal expression(:and, term('pearl'), expression(:or, term('ruby'), term('sapphire'))),
-                 query('pearl, ruby OR sapphire')
+    assert_equal expression(:or, expression(:and, term('ruby'),
+                                                  term('sapphire')), term('pearl')),
+                 query('ruby, sapphire OR pearl')
 
-    assert_equal expression(:and, expression(:or, term('pearl'), term('ruby')), term('sapphire')),
+    assert_equal expression(:or, term('pearl'), expression(:and, term('ruby'),
+                                                                 term('sapphire'))),
                  query('pearl OR ruby, sapphire')
 
-    assert_equal expression(:and, negated(term('pearl')), expression(:or, negated(term('ruby')),
-                                                                          negated(term('sapphire')))),
-                 query('NOT pearl, NOT ruby OR NOT sapphire')
+    assert_equal expression(:or, expression(:and, negated(term('ruby')),
+                                                  negated(term('sapphire'))), negated(term('pearl'))),
+                 query('NOT ruby, NOT sapphire OR NOT pearl')
 
-    assert_equal expression(:and, expression(:or, negated(term('pearl')), negated(term('ruby'))),
-                                  negated(term('sapphire'))),
+    assert_equal expression(:or, negated(term('pearl')), expression(:and, negated(term('ruby')),
+                                                                          negated(term('sapphire')))),
                  query('NOT pearl OR NOT ruby, NOT sapphire')
   end
 
@@ -49,22 +51,24 @@ class ParserTest < ActiveSupport::TestCase
 
   test 'nested parenthesized expressions' do
     assert_equal expression(:or, term('pearl'),
-                            expression(:and, term('nested'),
-                                       negated(expression(:or, negated((expression(:and, term('ruby'),
-                                                                                   term('sapphire')))),
-                                                          term('pearl'))))),
+                                 expression(:and, term('nested'),
+                                                  negated(expression(:or, negated((expression(:and, term('ruby'),
+                                                                                                    term('sapphire')))),
+                                                                          term('pearl'))))),
                  query('pearl OR (nested, NOT (NOT (ruby, sapphire) OR pearl))')
   end
 
   test 'complex string terms' do
     # string with balanced parentheses
     assert_equal expression(:or, term('pearl (yellow diamond)'),
-                            expression(:and, term('pearl (blue diamond)'), term('pearl'))),
+                                 expression(:and, term('pearl (blue diamond)'),
+                                                  term('pearl'))),
                  query('pearl (yellow diamond) OR (pearl (blue diamond), pearl)')
 
     # quoted string
     assert_equal expression(:or, term('"quoted" string'),
-                            expression(:and, term('pearl'), term('string with special characters =('))),
+                                  expression(:and, term('pearl'),
+                                                   term('string with special characters =('))),
                  query('"\"quoted\" string" OR (pearl, "string with special characters =(")')
   end
 
@@ -83,8 +87,9 @@ class ParserTest < ActiveSupport::TestCase
 
   test 'field queries as a part of a complex expression' do
     assert_equal expression(:or, term('pearl'),
-                            negated(expression(:and, field_term('date', '3 years ago'),
-                                               expression(:and, field_term('stars', '5'), term('ruby'))))),
+                                 negated(expression(:and, field_term('date', '3 years ago'),
+                                                          expression(:and, field_term('stars', '5'),
+                                                                           term('ruby'))))),
                  query('pearl OR NOT (date:3 years ago, stars:5, ruby)', [:date, :stars])
   end
 
@@ -96,18 +101,21 @@ class ParserTest < ActiveSupport::TestCase
                  query('stars: more than 50', [:stars])
 
     assert_equal expression(:and, field_term('date', :gt, '2016'),
-                            field_term('stars', :lt, '10')),
+                                  field_term('stars', :lt, '10')),
                  query('date: later than 2016, stars: less than 10', [:date, :stars])
   end
 
   test 'whitespace' do
-    assert_equal expression(:and, term('pearl'), expression(:or, term('ruby'), negated(term('sapphire')))),
-                 query('pearl  ,    ruby       OR   NOT    sapphire')
-    assert_equal expression(:and, term('pearl'), expression(:or, term('ruby'), negated(term('sapphire')))),
-                 query('pearl,rubyORNOTsapphire')
+    assert_equal expression(:or, expression(:and, term('sapphire'),
+                                                  term('ruby')), negated(term('pearl'))),
+                 query('sapphire  ,    ruby       OR   NOT    pearl')
+    assert_equal expression(:or, expression(:and, term('sapphire'),
+                                                  term('ruby')), negated(term('pearl'))),
+                 query('sapphire,rubyORNOTpearl')
 
     assert_equal expression(:or, term('pearl ( yellow    diamond )'),
-                            expression(:and, term('pearl (blue diamond)'), term('pearl'))),
+                                 expression(:and, term('pearl (blue diamond)'),
+                                                  term('pearl'))),
                  query('pearl ( yellow    diamond )      OR       (    pearl (blue diamond),        pearl    )')
 
     assert_equal field_term('stars', :gt, '50'),

@@ -13,13 +13,11 @@ module Elasticfusion
                :match_field, :left_parentheses, :right_parentheses,
                :safe_string, :quoted_string, :string_with_balanced_parentheses, to: :@lexer
 
-      # TODO FIXME: NOT > AND > OR
-
-      # query                    = conjunction
+      # query                    = disjunction
       #                          ;
-      # conjunction              = disjunction , [ "," , conjunction ]
+      # disjunction              = conjunction , [ "," , disjunction ]
       #                          ;
-      # disjunction              = boolean clause , [ "OR" , disjunction ]
+      # conjunction              = boolean clause , [ "OR" , conjunction ]
       #                          ;
       # boolean clause           = "NOT" , boolean clause
       #                          | clause
@@ -28,7 +26,7 @@ module Elasticfusion
       #                          | field term
       #                          | term
       #                          ;
-      # parenthesized expression = "(" , conjunction , ")"
+      # parenthesized expression = "(" , disjunction , ")"
       #                          ;
       # field term               = field , ":" , [ field qualifier ] , safe string
       #                          ;
@@ -37,29 +35,12 @@ module Elasticfusion
       #                          ;
 
       def ast
-        conjunction
-      end
-
-      def conjunction
-        skip :whitespace
-        left = disjunction
-
-        skip :whitespace
-        connective = match :and
-
-        skip :whitespace
-        right = conjunction if connective
-
-        if right
-          Expression.new :and, left, right
-        else
-          left
-        end
+        disjunction
       end
 
       def disjunction
         skip :whitespace
-        left = boolean_clause
+        left = conjunction
 
         skip :whitespace
         connective = match :or
@@ -69,6 +50,23 @@ module Elasticfusion
 
         if right
           Expression.new :or, left, right
+        else
+          left
+        end
+      end
+
+      def conjunction
+        skip :whitespace
+        left = boolean_clause
+
+        skip :whitespace
+        connective = match :and
+
+        skip :whitespace
+        right = conjunction if connective
+
+        if right
+          Expression.new :and, left, right
         else
           left
         end
@@ -100,7 +98,7 @@ module Elasticfusion
         opening_parens = left_parentheses
 
         if opening_parens
-          body = conjunction
+          body = disjunction
           closing_parens = right_parentheses(opening_parens)
 
           if opening_parens == closing_parens
