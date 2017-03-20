@@ -15,11 +15,11 @@ module Elasticfusion
 
       # query                    = disjunction
       #                          ;
-      # disjunction              = conjunction , [ "," , disjunction ]
+      # disjunction              = conjunction , [ ( "OR" | "|" ) , disjunction ]
       #                          ;
-      # conjunction              = boolean clause , [ "OR" , conjunction ]
+      # conjunction              = boolean clause , [ ( "AND" | "," ) , conjunction ]
       #                          ;
-      # boolean clause           = "NOT" , boolean clause
+      # boolean clause           = ( "NOT" | "-" ) , boolean clause
       #                          | clause
       #                          ;
       # clause                   = parenthesized expression
