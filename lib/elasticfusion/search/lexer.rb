@@ -6,15 +6,15 @@ module Elasticfusion
     class Lexer
       TOKENS = {
         whitespace: /\s+/,
-        and: /,/,
-        or: /OR/,
-        not: /NOT/,
+        and: /AND|,/,
+        or: /OR|\|/,
+        not: /NOT|-/,
         field_query_delimiter: /:/,
         field_qualifier: /less than|more than|earlier than|later than/,
 
-        safe_string_until: /(\s*)(,|OR|NOT|"|\(|\))/,
+        safe_string_until: /(\s*)(AND|OR|,|\||"|\(|\))/,
         quoted_string: /"(?:[^\\]|\\.)*?"/,
-        string_with_balanced_parentheses_until: /,|OR|NOT/
+        string_with_balanced_parentheses_until: /AND|OR|,|\|/
       }
 
       def initialize(string, searchable_fields)
