@@ -33,5 +33,4 @@ Refer to it for real-world usage examples.
 
 ### Aknowledgements
 
-This gem was largely inspired by search handling in *booru-on-rails* ([Derpibooru](https://www.derpibooru.org)). 
-In particular, I would like to express my gratitude to @liamwhite for his extensive work on the related code.
+This gem was largely inspired by search handling in *booru-on-rails* ([Derpibooru](https://www.derpibooru.org)).
