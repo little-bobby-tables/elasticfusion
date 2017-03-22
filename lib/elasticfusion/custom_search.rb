@@ -49,15 +49,15 @@ module Elasticfusion
       end
     end
 
-    private
-
     class QueryBuilder
       def initialize(scopes, default_query, default_sort, allowed_sort_fields)
         @scopes = scopes || {}
         @default_query = default_query || { match_all: {} }
         @default_sort = default_sort || {}
         @allowed_sort_fields = allowed_sort_fields
-        @queries, @filters, @sorts = [], [], []
+        @queries = []
+        @filters = []
+        @sorts = []
       end
 
       def query(query)
@@ -76,7 +76,7 @@ module Elasticfusion
       end
 
       def sort_by(field, direction)
-        raise Search::UnknownSortFieldError.new(field) if @allowed_sort_fields.exclude? field.to_s
+        raise Search::UnknownSortFieldError, field if @allowed_sort_fields.exclude? field.to_s
         raise Search::InvalidSortOrderError if %w(desc asc).exclude? direction.to_s
         @sorts << { field => direction }
       end

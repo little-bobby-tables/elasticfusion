@@ -1,0 +1,5 @@
+engines:
+  rubocop:
+    enabled: true
+    config:
+      config: .rubocop.yml

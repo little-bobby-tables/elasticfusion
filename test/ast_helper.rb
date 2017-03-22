@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 def query(string, fields = [])
   Elasticfusion::Search::Parser.new(string, fields).ast
 end

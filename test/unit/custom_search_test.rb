@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 require 'active_record_helper'
 
@@ -15,13 +16,13 @@ class CustomSearchTest < ActiveSupport::TestCase
     end
 
     filter = search_body { |s| s.scope(:starstruck) }[:query][:bool][:filter]
-    assert_includes filter, { term: { stars: 1 } }
+    assert_includes filter, term: { stars: 1 }
 
     filter = search_body { |s| s.scope(:stars, 42) }[:query][:bool][:filter]
-    assert_includes filter, { term: { stars: 42 } }
+    assert_includes filter, term: { stars: 42 }
 
     filter = search_body { |s| s.scope(:stars_in_range, :lt, 2) }[:query][:bool][:filter]
-    assert_includes filter, { range: { stars: { lt: 2 } } }
+    assert_includes filter, range: { stars: { lt: 2 } }
 
     assert_raises ArgumentError do
       search_body { |s| s.scope(:theres_no_such_scope) }
@@ -32,31 +33,31 @@ class CustomSearchTest < ActiveSupport::TestCase
     model { allowed_search_fields [:stars] }
 
     terms = search_body('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
-    assert_includes terms, { term: { stars: '50' } }
-    refute_includes terms, { term: { date: '2016-12-01T12:00:00+07:00' } }
+    assert_includes terms, term: { stars: '50' }
+    refute_includes terms, term: { date: '2016-12-01T12:00:00+07:00' }
 
     model { allowed_search_fields [:date] }
 
     terms = search_body('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
-    refute_includes terms, { term: { stars: '50' } }
-    assert_includes terms, { term: { date: '2016-12-01T12:00:00+07:00' } }
+    refute_includes terms, term: { stars: '50' }
+    assert_includes terms, term: { date: '2016-12-01T12:00:00+07:00' }
   end
 
   test ':keyword_field' do
     model { keyword_field :tags }
 
     terms = search_body('peridot, lapis lazuli')[:query][:bool][:filter].first[:bool][:must]
-    assert_includes terms, { term: { tags: 'peridot' } }
+    assert_includes terms, term: { tags: 'peridot' }
   end
 
   test ':allowed_sort_fields' do
     model { allowed_sort_fields [:stars] }
 
     sorts = search_body('pearl') { |s| s.sort_by('stars', 'desc') }[:sort]
-    assert_includes sorts, { 'stars' => 'desc' }
+    assert_includes sorts, 'stars' => 'desc'
 
     sorts = search_body('pearl') { |s| s.sort_by(:stars, :desc) }[:sort]
-    assert_includes sorts, { stars: :desc }
+    assert_includes sorts, stars: :desc
 
     e = assert_raises Elasticfusion::Search::UnknownSortFieldError do
       search_body('pearl') { |s| s.sort_by('decidedly_not_stars', 'desc') }

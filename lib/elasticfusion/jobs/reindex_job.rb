@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Elasticfusion
   module Jobs
     class ReindexJob < ActiveJob::Base

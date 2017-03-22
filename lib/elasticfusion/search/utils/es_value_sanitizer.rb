@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'chronic'
 
 module Elasticfusion
@@ -9,21 +10,19 @@ module Elasticfusion
 
       def value(value, field:)
         case @mapping[field.to_sym][:type]
-          when 'keyword'
-            value
-          when 'integer'
-            es_integer(value, field: field)
-          when 'date'
-            es_date(value, field: field)
-          else
-            nil
+        when 'keyword'
+          value
+        when 'integer'
+          es_integer(value, field: field)
+        when 'date'
+          es_date(value, field: field)
         end
       end
 
       private
 
       def es_integer(string, field:)
-        if string =~ /\A[+-]?\d+\z/
+        if string.match? /\A[+-]?\d+\z/
           string
         else
           raise InvalidFieldValueError.new(field, string)

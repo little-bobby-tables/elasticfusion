@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 require 'ast_helper'
 
@@ -19,12 +20,12 @@ class PolyadicTreeVisitorTest < ActiveSupport::TestCase
   end
 
   test 'flattens sub-trees' do
-    expected =  polyadic(:and, [polyadic(:or,
+    expected = polyadic(:and, [polyadic(:or,
                                          [term('ruby'),
                                           term('sapphire'),
                                           polyadic(:and, [term('pearl'), term('amethyst')]),
                                           term('garnet')]),
-                                polyadic(:or,
+                               polyadic(:or,
                                          [negated(polyadic(:or,
                                                            [term('peridot'),
                                                             term('lapis'),
@@ -32,7 +33,7 @@ class PolyadicTreeVisitorTest < ActiveSupport::TestCase
                                           term('steven'),
                                           negated(term('gem')),
                                           term('diamond')]),
-                                term('too much?')])
+                               term('too much?')])
 
     input = expression(:and, expression(:or,
                                         expression(:or, term('ruby'), term('sapphire')),

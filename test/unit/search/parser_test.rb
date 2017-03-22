@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 require 'ast_helper'
 
@@ -52,8 +53,8 @@ class ParserTest < ActiveSupport::TestCase
   test 'nested parenthesized expressions' do
     assert_equal expression(:and, term('pearl'),
                                   expression(:or, term('nested'),
-                                                  negated(expression(:and, negated((expression(:or, term('ruby'),
-                                                                                                    term('sapphire')))),
+                                                  negated(expression(:and, negated(expression(:or, term('ruby'),
+                                                                                                    term('sapphire'))),
                                                                            term('pearl'))))),
                  query('pearl, (nested | -(-(ruby | sapphire), pearl))')
   end

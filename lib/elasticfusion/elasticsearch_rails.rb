@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Elasticfusion
   module ElasticsearchActiveRecordPatch
     # https://github.com/elastic/elasticsearch-rails/issues/608,
@@ -9,4 +10,5 @@ module Elasticfusion
   end
 end
 
-Elasticsearch::Model::Adapter::ActiveRecord::Records.prepend Elasticfusion::ElasticsearchActiveRecordPatch
+Elasticsearch::Model::Adapter::ActiveRecord::Records.prepend(
+  Elasticfusion::ElasticsearchActiveRecordPatch)

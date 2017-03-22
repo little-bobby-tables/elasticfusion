@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'elasticfusion/search/visitor'
 require 'elasticfusion/search/ast'
 
@@ -35,17 +36,17 @@ module Elasticfusion
 
       def rewrite(node, parent: nil)
         case node
-          when NegatedClause
-            node.body = rewrite(node.body)
-          when Expression
-            flattened = [rewrite(node.left, parent: node),
-                         rewrite(node.right, parent: node)].flatten
+        when NegatedClause
+          node.body = rewrite(node.body)
+        when Expression
+          flattened = [rewrite(node.left, parent: node),
+                       rewrite(node.right, parent: node)].flatten
 
-            if parent && node.op && node.op == parent.op
-              return flattened
-            else
-              return PolyadicExpression.new(node.op, flattened)
-            end
+          if parent && node.op && node.op == parent.op
+            return flattened
+          else
+            return PolyadicExpression.new(node.op, flattened)
+          end
         end
         node
       end

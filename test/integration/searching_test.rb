@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 require 'active_record_helper'
 
@@ -22,9 +23,13 @@ class SearchingTest < ActiveSupport::TestCase
 
         scopes do
           {
-            tag_expression: ->            { { bool: { must: [{ term: { tags: 'lapis lazuli' } },
-                                                             { term: { tags: 'peridot' } }] } } },
-            stars_in_range: ->(qual, val) { { range: { stars: { qual => val } } } }
+            tag_expression: -> do
+              { bool: { must: [{ term: { tags: 'lapis lazuli' } },
+                               { term: { tags: 'peridot' } }] } }
+            end,
+            stars_in_range: ->(qual, val) do
+              { range: { stars: { qual => val } } }
+            end
           }
         end
       end

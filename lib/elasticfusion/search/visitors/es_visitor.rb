@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'elasticfusion/search/visitors/polyadic_tree_visitor'
 require 'elasticfusion/search/utils/es_value_sanitizer'
 
@@ -26,7 +27,7 @@ module Elasticfusion
           [visit(node.body)]
         end
 
-        { bool: { must_not: clause }}
+        { bool: { must_not: clause } }
       end
 
       def visit_FieldTerm(node)

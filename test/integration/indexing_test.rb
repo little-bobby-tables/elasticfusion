@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 require 'active_record_helper'
 
@@ -72,7 +73,7 @@ class IndexingTest < ActiveSupport::TestCase
     if block_given?
       Elasticfusion.define(@model, &block)
     else
-      Elasticfusion.define(@model) { }
+      Elasticfusion.define(@model) {}
     end
     @record = @model.new
     @record.save if persisted
@@ -85,7 +86,7 @@ class IndexingTest < ActiveSupport::TestCase
     if block_given?
       Elasticfusion.define(@model, &block)
     else
-      Elasticfusion.define(@model) { }
+      Elasticfusion.define(@model) {}
     end
     @record = @model.new
     @record.save

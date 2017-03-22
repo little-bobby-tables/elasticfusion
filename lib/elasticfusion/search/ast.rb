@@ -1,19 +1,15 @@
+# frozen_string_literal: true
 module Elasticfusion
   module Search
-    class Expression < Struct.new(:op, :left, :right)
-    end
+    Expression = Struct.new(:op, :left, :right)
 
     # See visitors/polyadic_tree_visitor.rb
-    class PolyadicExpression < Struct.new(:op, :children)
-    end
+    PolyadicExpression = Struct.new(:op, :children)
 
-    class NegatedClause < Struct.new(:body)
-    end
+    NegatedClause = Struct.new(:body)
 
-    class FieldTerm < Struct.new(:field, :qualifier, :value)
-    end
+    FieldTerm = Struct.new(:field, :qualifier, :value)
 
-    class Term < Struct.new(:body)
-    end
+    Term = Struct.new(:body)
   end
 end

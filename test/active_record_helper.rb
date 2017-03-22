@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 def ar_model(name)
   ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:') unless ActiveRecord::Base.connected?
 
@@ -16,7 +17,6 @@ def ar_model(name)
   name = name.to_sym
   Object.send(:remove_const, name) if Object.constants.include?(name)
 
-  Object.const_set(name, Class.new(ActiveRecord::Base)).tap do |m|
-    m.delete_all # reset records created by previous tests
-  end
+  Object.const_set(name, Class.new(ActiveRecord::Base))
+        .tap(&:delete_all) # Reset records created by previous tests
 end

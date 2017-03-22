@@ -15,7 +15,7 @@ module Elasticfusion
         safe_string_until: /(\s*)(AND|OR|,|\||"|\(|\))/,
         quoted_string: /"(?:[^\\]|\\.)*?"/,
         string_with_balanced_parentheses_until: /AND|OR|,|\|/
-      }
+      }.freeze
 
       def initialize(string, searchable_fields)
         @scanner = StringScanner.new(string)

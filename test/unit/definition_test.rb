@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class DefinitionTest < ActiveSupport::TestCase
   test 'adds model extensions' do
     @class = Class.new(ActiveRecord::Base)
 
-    Elasticfusion.define(@class) { }
+    Elasticfusion.define(@class) {}
 
     assert_includes @class.ancestors, Elasticsearch::Model
     assert_includes @class.ancestors, Elasticfusion::Model::Indexing

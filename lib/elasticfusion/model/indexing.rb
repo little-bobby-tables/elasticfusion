@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'elasticfusion/jobs/reindex_job'
 
 module Elasticfusion

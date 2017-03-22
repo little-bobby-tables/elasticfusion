@@ -1,0 +1,67 @@
+AllCops:
+  TargetRubyVersion: 2.4
+
+Lint/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/BlockLength:
+  Max: 30
+  Exclude:
+    - test/**/*
+
+Metrics/ClassLength:
+  Max: 200
+
+Metrics/LineLength:
+  Max: 100
+  Exclude:
+    - test/**/*
+
+Metrics/MethodLength:
+  Max: 20
+
+# In search tests, parameters are aligned in a special way
+# for the sake of readability.
+Style/AlignParameters:
+  Exclude:
+    - test/unit/search/**/*
+
+Style/AndOr:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+# Guard clauses make parsing-related code actually harder to read.
+Style/GuardClause:
+  Exclude:
+    - lib/elasticfusion/search/**/*
+
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+
+Style/OptionalArguments:
+  Exclude:
+    - test/**/*
+
+Style/Lambda:
+  EnforcedStyle: literal
+
+Style/MethodName:
+  Exclude:
+    - lib/elasticfusion/search/visitors/es_visitor.rb
+
+Style/MultilineMethodCallBraceLayout:
+  EnforcedStyle: same_line
+
+Style/RedundantSelf:
+  Enabled: false
