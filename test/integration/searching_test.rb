@@ -57,6 +57,16 @@ class SearchingTest < ActiveSupport::TestCase
     assert_empty search.records
   end
 
+  test 'queries are case-insensitive' do
+    record = @model.create tags: ['peridot', 'lapis lazuli'], date: 3.days.ago
+
+    search = @model.search_by_query('Peridot AND Lapis Lazuli')
+    assert_equal record, search.records.first
+
+    search = @model.search_by_query('peRIDOT OR laPIS laZULI')
+    assert_equal record, search.records.first
+  end
+
   test 'searching with a manual query' do
     record = @model.create tags: ['peridot', 'lapis lazuli'], stars: 50, date: 1.day.ago
 

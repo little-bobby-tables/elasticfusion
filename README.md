@@ -3,7 +3,7 @@
 Elasticfusion provides additional functionality on top of [*elasticsearch-rails*](https://github.com/elastic/elasticsearch-rails).
 
 It includes:
-* a keyword-based search language supporting boolean expressions
+* a keyword-based case-insensitive search engine supporting boolean expressions
 (conjunction, disjunction, negation) and field queries (range);
 * background jobs to carry out index updates.
 

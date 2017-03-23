@@ -126,7 +126,7 @@ module Elasticfusion
       def term
         string = quoted_string || string_with_balanced_parentheses
 
-        Term.new string
+        Term.new string.downcase
       end
 
       FIELD_QUALIFIERS = { 'less than' => :lt,
