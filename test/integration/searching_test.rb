@@ -4,46 +4,20 @@ require 'active_record_helper'
 
 class SearchingTest < ActiveSupport::TestCase
   setup do
-    @model = ar_model 'SearchingTestModel' do |t|
-      t.string :tags, array: true
-      t.integer :stars
-      t.date :date
-    end
-    Elasticfusion.define @model do
-      settings index: { number_of_shards: 1 } do
-        mappings dynamic: false, _all: { enabled: false } do
-          indexes :tags, type: 'keyword'
-          indexes :stars, type: 'integer'
-          indexes :date, type: 'date'
-        end
+    @model = tags_stars_date_model do
+      keyword_field :tags
+
+      scopes do
+        {
+          tag_expression: -> do
+            { bool: { must: [{ term: { tags: 'lapis lazuli' } },
+                             { term: { tags: 'peridot' } }] } }
+          end,
+          stars_in_range: ->(qual, val) do
+            { range: { stars: { qual => val } } }
+          end
+        }
       end
-
-      elasticfusion do
-        keyword_field :tags
-
-        scopes do
-          {
-            tag_expression: -> do
-              { bool: { must: [{ term: { tags: 'lapis lazuli' } },
-                               { term: { tags: 'peridot' } }] } }
-            end,
-            stars_in_range: ->(qual, val) do
-              { range: { stars: { qual => val } } }
-            end
-          }
-        end
-      end
-
-      after_commit(on: :create) do
-        self.class.__elasticsearch__.refresh_index!
-      end
-
-      def as_indexed_json(*)
-        { tags: JSON.parse(tags), stars: stars, date: date.iso8601 }
-      end
-
-      index_name 'searching_test_model_index'
-      __elasticsearch__.create_index!
     end
   end
 
