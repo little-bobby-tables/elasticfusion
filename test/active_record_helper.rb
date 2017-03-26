@@ -25,7 +25,7 @@ def tags_stars_date_model(&block)
   model = ar_model 'SearchingTestModel' do |t|
     t.string :tags, array: true
     t.integer :stars
-    t.date :date
+    t.datetime :date
   end
 
   Elasticfusion.define model do
