@@ -3,9 +3,6 @@ require 'test_helper'
 
 class DefinitionTest < ActiveSupport::TestCase
   test 'adds model extensions' do
-    class TestModel < ActiveRecord::Base
-    end
-
     with_ar_class do |cls|
       Elasticfusion.define(cls) {}
 
