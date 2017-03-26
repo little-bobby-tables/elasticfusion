@@ -15,30 +15,30 @@ class SearchWrapperTest < ActiveSupport::TestCase
       end
     end
 
-    filter = search_body { |s| s.scope(:starstruck) }[:query][:bool][:filter]
+    filter = search_request { |s| s.scope(:starstruck) }[:query][:bool][:filter]
     assert_includes filter, term: { stars: 1 }
 
-    filter = search_body { |s| s.scope(:stars, 42) }[:query][:bool][:filter]
+    filter = search_request { |s| s.scope(:stars, 42) }[:query][:bool][:filter]
     assert_includes filter, term: { stars: 42 }
 
-    filter = search_body { |s| s.scope(:stars_in_range, :lt, 2) }[:query][:bool][:filter]
+    filter = search_request { |s| s.scope(:stars_in_range, :lt, 2) }[:query][:bool][:filter]
     assert_includes filter, range: { stars: { lt: 2 } }
 
     assert_raises ArgumentError do
-      search_body { |s| s.scope(:theres_no_such_scope) }
+      search_request { |s| s.scope(:theres_no_such_scope) }
     end
   end
 
   test ':searchable_fields' do
     model { searchable_fields [:stars] }
 
-    terms = search_body('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
+    terms = search_request('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
     assert_includes terms, term: { stars: '50' }
     refute_includes terms, term: { date: '2016-12-01T12:00:00+07:00' }
 
     model { searchable_fields [:date] }
 
-    terms = search_body('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
+    terms = search_request('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
     refute_includes terms, term: { stars: '50' }
     assert_includes terms, term: { date: '2016-12-01T12:00:00+07:00' }
   end
@@ -46,13 +46,13 @@ class SearchWrapperTest < ActiveSupport::TestCase
   test ':keyword_field' do
     model { keyword_field :tags }
 
-    terms = search_body('peridot, lapis lazuli')[:query][:bool][:filter].first[:bool][:must]
+    terms = search_request('peridot, lapis lazuli')[:query][:bool][:filter].first[:bool][:must]
     assert_includes terms, term: { tags: 'peridot' }
   end
 
-  def search_body(query = nil, &block)
-    s = Elasticfusion::Search::Wrapper.new(@model, query, &block)
-    s.elasticsearch_payload(size: nil, from: nil)
+  def search_request(query = nil, &block)
+    Elasticfusion::Search::Wrapper.new(@model, query, &block)
+      .elasticsearch_request
   end
 
   def model(&block)

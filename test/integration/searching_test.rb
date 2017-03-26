@@ -47,27 +47,27 @@ class SearchingTest < ActiveSupport::TestCase
     end
   end
 
-  test 'searching by parsed query' do
+  test 'searching by query' do
     record = @model.create tags: ['peridot', 'lapis lazuli'], stars: 30, date: 3.days.ago
 
-    search = @model.search_by_query('peridot, stars: 30, date: earlier than 2 days ago')
+    search = @model.custom_search('peridot, stars: 30, date: earlier than 2 days ago')
     assert_equal record, search.records.first
 
-    search = @model.search_by_query('peridot, stars: 30, date: 3 hours ago')
+    search = @model.custom_search('peridot, stars: 30, date: 3 hours ago')
     assert_empty search.records
   end
 
   test 'queries are case-insensitive' do
     record = @model.create tags: ['peridot', 'lapis lazuli'], date: 3.days.ago
 
-    search = @model.search_by_query('Peridot AND Lapis Lazuli')
+    search = @model.custom_search('Peridot AND Lapis Lazuli')
     assert_equal record, search.records.first
 
-    search = @model.search_by_query('peRIDOT OR laPIS laZULI')
+    search = @model.custom_search('peRIDOT OR laPIS laZULI')
     assert_equal record, search.records.first
   end
 
-  test 'searching with a manual query' do
+  test 'building the search request manually' do
     record = @model.create tags: ['peridot', 'lapis lazuli'], stars: 50, date: 1.day.ago
 
     search = @model.custom_search do |s|
@@ -83,15 +83,15 @@ class SearchingTest < ActiveSupport::TestCase
     assert_empty search.records
   end
 
-  test 'combining parsed query with manual filters' do
+  test 'combining queries with manual filters' do
     record = @model.create tags: ['peridot', 'lapis lazuli'], stars: 100, date: 2.days.ago
 
-    search = @model.search_by_query('peridot, date: earlier than a day ago') do |s|
+    search = @model.custom_search('peridot, date: earlier than a day ago') do |s|
       s.scope :stars_in_range, :lte, 100
     end
     assert_equal record, search.records.first
 
-    search = @model.search_by_query('peridot, date: earlier than a day ago') do |s|
+    search = @model.custom_search('peridot, date: earlier than a day ago') do |s|
       s.scope :stars_in_range, :lt, 100
     end
     assert_empty search.records
