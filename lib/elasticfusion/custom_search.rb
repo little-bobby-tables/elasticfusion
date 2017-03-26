@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-require 'elasticfusion/search/parser'
-require 'elasticfusion/search/visitors/es_visitor'
+require 'elasticfusion/search/query/parser'
+require 'elasticfusion/search/query/visitors/elasticsearch'
 
 # An instance of this class represents a single search.
 # It encapsulates all custom search features (advanced query parsing,
@@ -29,8 +29,8 @@ module Elasticfusion
     end
 
     def parse_query(query)
-      ast = Search::Parser.new(query, @searchable_fields).ast
-      visitor = Search::ESVisitor.new(@keyword_field, @mapping)
+      ast = Search::Query::Parser.new(query, @searchable_fields).ast
+      visitor = Search::Query::Visitors::Elasticsearch.new(@keyword_field, @mapping)
       # All of the queries currently supported by search parser can be executed
       # in the filter context, which is faster than query (does not compute _score)
       # and can be cached.

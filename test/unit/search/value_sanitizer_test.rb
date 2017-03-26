@@ -2,8 +2,8 @@
 require 'test_helper'
 require 'ast_helper'
 
-class ESValueSanitizerTest < ActiveSupport::TestCase
-  S = Elasticfusion::Search::ESValueSanitizer
+class ValueSanitizerTest < ActiveSupport::TestCase
+  S = Elasticfusion::Search::Query::ValueSanitizer
 
   test 'does not alter keywords' do
     assert_equal 'term', S.new(tags: { type: 'keyword' }).value('term', field: :tags)

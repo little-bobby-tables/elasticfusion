@@ -2,7 +2,7 @@
 require 'test_helper'
 require 'ast_helper'
 
-class ESVisitorTest < ActiveSupport::TestCase
+class ElasticsearchVisitorTest < ActiveSupport::TestCase
   class TestModel < ActiveRecord::Base
     include Elasticsearch::Model
 
@@ -113,10 +113,10 @@ class ESVisitorTest < ActiveSupport::TestCase
   end
 
   def visitor
-    Elasticfusion::Search::ESVisitor.new(:tags, TestModel.mapping)
+    Elasticfusion::Search::Query::Visitors::Elasticsearch.new(:tags, TestModel.mapping)
   end
 
   def date(string)
-    Elasticfusion::Search::ESValueSanitizer.new(TestModel.mapping).value(string, field: :date)
+    Elasticfusion::Search::Query::ValueSanitizer.new(TestModel.mapping).value(string, field: :date)
   end
 end

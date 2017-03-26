@@ -64,7 +64,7 @@ class LexerTest < ActiveSupport::TestCase
   end
 
   def assert_lex(action, expected:, source:, should_remain: '')
-    lexer = Elasticfusion::Search::Lexer.new(source, [])
+    lexer = Elasticfusion::Search::Query::Lexer.new(source, [])
     assert_equal expected, lexer.send(action)
     assert_equal should_remain, lexer.instance_variable_get(:@scanner).rest
   end

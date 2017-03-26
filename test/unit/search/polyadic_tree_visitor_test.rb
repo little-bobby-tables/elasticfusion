@@ -51,6 +51,6 @@ class PolyadicTreeVisitorTest < ActiveSupport::TestCase
   end
 
   def visitor
-    Elasticfusion::Search::PolyadicTreeVisitor.new
+    Elasticfusion::Search::Query::Visitors::PolyadicTree.new
   end
 end
