@@ -11,9 +11,11 @@ module Elasticfusion
   module Search
     class Wrapper
       def initialize(model, query, &block)
+        @search_runner     = model.method :search
+
+        @mapping           = model.elasticfusion[:mapping]
         @searchable_fields = model.elasticfusion[:searchable_fields]
         @keyword_field     = model.elasticfusion[:keyword_field]
-        @mapping           = model.elasticfusion[:mapping]
 
         @builder = Search::Builder.new(model.elasticfusion)
         @builder.instance_eval(&block) if block_given?
@@ -22,6 +24,11 @@ module Elasticfusion
         # in the filter context, which does not compute _score and can be cached.
         # It cannot be used for relevance sorting, though.
         @builder.filter parse_query(query) if query.present?
+      end
+
+      def perform
+        request = elasticsearch_request
+        @search_runner.call(request)
       end
 
       def elasticsearch_request
