@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'elasticfusion/custom_search'
+require 'elasticfusion/search/wrapper'
 
 module Elasticfusion
   module Model
@@ -7,13 +7,13 @@ module Elasticfusion
       def self.included(model)
         model.class_eval do
           def self.custom_search(size: nil, from: nil, &block)
-            body = CustomSearch.new(self, &block)
+            body = Search::Wrapper.new(self, &block)
                                .elasticsearch_client_request(size: size, from: from)
             self.search(body)
           end
 
           def self.search_by_query(query, size: nil, from: nil, &block)
-            body = CustomSearch.new(self, query, &block)
+            body = Search::Wrapper.new(self, query, &block)
                                .elasticsearch_client_request(size: size, from: from)
             self.search(body)
           end

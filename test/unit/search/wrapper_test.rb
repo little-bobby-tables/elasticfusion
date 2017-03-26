@@ -2,7 +2,7 @@
 require 'test_helper'
 require 'active_record_helper'
 
-class CustomSearchTest < ActiveSupport::TestCase
+class SearchWrapperTest < ActiveSupport::TestCase
   test ':scopes' do
     model do
       allowed_search_fields [:stars]
@@ -70,7 +70,7 @@ class CustomSearchTest < ActiveSupport::TestCase
   end
 
   def search_body(query = nil, &block)
-    s = Elasticfusion::CustomSearch.new(@model, query, &block)
+    s = Elasticfusion::Search::Wrapper.new(@model, query, &block)
     s.elasticsearch_client_request(size: nil, from: nil)
   end
 

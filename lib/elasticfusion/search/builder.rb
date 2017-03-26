@@ -3,14 +3,15 @@
 module Elasticfusion
   module Search
     class Builder
-      def initialize(scopes, default_query, default_sort, allowed_sort_fields)
-        @scopes = scopes || {}
-        @default_query = default_query || { match_all: {} }
-        @default_sort = default_sort || {}
-        @allowed_sort_fields = allowed_sort_fields || []
+      def initialize(settings)
+        @scopes              = settings[:scopes]              || {}
+        @default_query       = settings[:default_query]       || { match_all: {} }
+        @default_sort        = settings[:default_sort]        || {}
+        @allowed_sort_fields = settings[:allowed_sort_fields] || []
+
         @queries = []
         @filters = []
-        @sorts = []
+        @sorts   = []
       end
 
       def query(query)
