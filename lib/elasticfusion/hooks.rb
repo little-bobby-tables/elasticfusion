@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Elasticfusion
-  module ElasticsearchActiveRecordPatch
+  module ActiveRecordAdapterPatch
     # https://github.com/elastic/elasticsearch-rails/issues/608,
     # might be related to https://github.com/elastic/elasticsearch-rails/issues/258,
     # though in my experience it only affects Rails 5+.
@@ -11,4 +11,4 @@ module Elasticfusion
 end
 
 Elasticsearch::Model::Adapter::ActiveRecord::Records.prepend(
-  Elasticfusion::ElasticsearchActiveRecordPatch)
+  Elasticfusion::ActiveRecordAdapterPatch)

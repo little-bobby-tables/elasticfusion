@@ -3,8 +3,6 @@ require 'elasticfusion/model/settings'
 require 'elasticfusion/model/indexing'
 require 'elasticfusion/model/searching'
 
-require 'elasticsearch/model'
-
 module Elasticfusion
   def self.define(cls, &block)
     cls.class_eval do

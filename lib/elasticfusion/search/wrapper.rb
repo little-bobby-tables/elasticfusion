@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'elasticfusion/search/builder'
+require 'elasticfusion/search/errors'
 require 'elasticfusion/search/query/parser'
 require 'elasticfusion/search/query/visitors/elasticsearch'
 

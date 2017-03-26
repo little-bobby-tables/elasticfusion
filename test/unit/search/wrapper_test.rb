@@ -71,7 +71,7 @@ class SearchWrapperTest < ActiveSupport::TestCase
 
   def search_body(query = nil, &block)
     s = Elasticfusion::Search::Wrapper.new(@model, query, &block)
-    s.elasticsearch_client_request(size: nil, from: nil)
+    s.elasticsearch_payload(size: nil, from: nil)
   end
 
   def model(&block)
