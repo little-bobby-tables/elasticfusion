@@ -5,7 +5,7 @@ require 'active_record_helper'
 class SearchWrapperTest < ActiveSupport::TestCase
   test ':scopes' do
     model do
-      allowed_search_fields [:stars]
+      searchable_fields [:stars]
       scopes do
         {
           starstruck:     ->            { { term: { stars: 1 } } },
@@ -29,14 +29,14 @@ class SearchWrapperTest < ActiveSupport::TestCase
     end
   end
 
-  test ':allowed_search_fields' do
-    model { allowed_search_fields [:stars] }
+  test ':searchable_fields' do
+    model { searchable_fields [:stars] }
 
     terms = search_body('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
     assert_includes terms, term: { stars: '50' }
     refute_includes terms, term: { date: '2016-12-01T12:00:00+07:00' }
 
-    model { allowed_search_fields [:date] }
+    model { searchable_fields [:date] }
 
     terms = search_body('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
     refute_includes terms, term: { stars: '50' }

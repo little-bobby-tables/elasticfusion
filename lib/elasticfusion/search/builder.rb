@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module Elasticfusion
   module Search
     class Builder
@@ -14,12 +13,14 @@ module Elasticfusion
         @sorts   = []
       end
 
-      def query(query)
-        @queries << query
+      # Attribute writers
+
+      def query(q)
+        @queries << q
       end
 
-      def filter(query)
-        @filters << query
+      def filter(f)
+        @filters << f
       end
 
       def scope(scope, *args)
@@ -34,6 +35,8 @@ module Elasticfusion
         raise Search::InvalidSortOrderError if %w(desc asc).exclude? direction.to_s
         @sorts << { field => direction }
       end
+
+      # Attribute readers
 
       def queries
         return @queries if @queries.any?

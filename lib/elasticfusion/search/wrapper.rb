@@ -11,13 +11,17 @@ module Elasticfusion
   module Search
     class Wrapper
       def initialize(model, query = nil, &block)
-        @mapping = searchable_mapping(model)
-        @searchable_fields = @mapping.keys
-        @keyword_field = model.elasticfusion[:keyword_field]
+        @searchable_fields = model.elasticfusion[:searchable_fields]
+        @keyword_field     = model.elasticfusion[:keyword_field]
+        @mapping           = model.elasticfusion[:mapping]
 
         @builder = Search::Builder.new(model.elasticfusion)
-        @builder.filter query_to_filter(query) if query
         @builder.instance_eval(&block) if block_given?
+
+        # The subset of queries that is currently supported can be executed
+        # in the filter context, which does not compute _score and can be cached.
+        # It cannot be used for relevance sorting, though.
+        @builder.filter parse_query(query) if query.present?
       end
 
       def elasticsearch_payload(size:, from:)
@@ -28,24 +32,11 @@ module Elasticfusion
         body
       end
 
-      def searchable_mapping(model)
-        mapping = model.__elasticsearch__.mapping.to_hash[
-          model.__elasticsearch__.document_type.to_sym][:properties]
+      private
 
-        if model.elasticfusion[:allowed_search_fields]
-          mapping.select { |field, _| model.elasticfusion[:allowed_search_fields].include? field }
-        else
-          mapping
-        end
-      end
-
-      # The subset of queries that is currently supported can be executed
-      # in the filter context, which does not compute _score and can be cached.
-      #
-      # It cannot be used for relevance sorting.
-      def query_to_filter(query)
-        ast = Search::Query::Parser.new(query, @searchable_fields).ast
-        visitor = Search::Query::Visitors::Elasticsearch.new(@keyword_field, @mapping)
+      def parse_query(query)
+        ast = Query::Parser.new(query, @searchable_fields).ast
+        visitor = Query::Visitors::Elasticsearch.new(@keyword_field, @mapping)
         visitor.accept(ast)
       end
     end

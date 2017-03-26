@@ -6,7 +6,23 @@ module Elasticfusion
 
       def initialize(model, &block)
         @model = model
-        @settings = (DSL.build_settings(&block) if block_given?) || {}
+
+        @settings = DSL.build_settings(&block) if block_given?
+        @settings ||= {}
+
+        @settings[:mapping] = searchable_mapping
+        @settings[:searchable_fields] ||= @settings[:mapping].keys
+      end
+
+      def searchable_mapping
+        mapping = @model.__elasticsearch__.mapping.to_hash[
+          @model.__elasticsearch__.document_type.to_sym][:properties]
+
+        if @settings[:searchable_fields]
+          mapping.select { |field, _| @settings[:searchable_fields].include? field }
+        else
+          mapping
+        end
       end
 
       class DSL
@@ -26,8 +42,8 @@ module Elasticfusion
           settings[:keyword_field] = field
         end
 
-        def allowed_search_fields(ary)
-          settings[:allowed_search_fields] = ary
+        def searchable_fields(ary)
+          settings[:searchable_fields] = ary
         end
 
         def allowed_sort_fields(ary)
