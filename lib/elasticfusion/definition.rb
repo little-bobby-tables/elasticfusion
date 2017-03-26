@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'elasticfusion/model/model_settings'
+require 'elasticfusion/model/settings'
 require 'elasticfusion/model/indexing'
 require 'elasticfusion/model/searching'
 
@@ -11,7 +11,7 @@ module Elasticfusion
       include Elasticsearch::Model
 
       def self.elasticfusion(&block)
-        @elasticfusion ||= Model::ModelSettings.new(self)
+        @elasticfusion ||= Model::Settings.new(self)
         @elasticfusion.configure_with_block(&block) if block_given?
         @elasticfusion
       end

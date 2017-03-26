@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Elasticfusion
   module Model
-    class ModelSettings
+    class Settings
       delegate :[], :values_at, to: :@settings
 
       def initialize(model)
