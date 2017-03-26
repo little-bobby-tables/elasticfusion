@@ -4,21 +4,13 @@ module Elasticfusion
     class Settings
       delegate :[], :values_at, to: :@settings
 
-      def initialize(model)
+      def initialize(model, &block)
         @model = model
-
-        # Default settings.
-        @settings = {
-          allowed_sort_fields: []
-        }
-      end
-
-      def configure_with_block(&block)
-        @settings.merge! DSL.build_settings_hash(&block)
+        @settings = (DSL.build_settings(&block) if block_given?) || {}
       end
 
       class DSL
-        def self.build_settings_hash(&block)
+        def self.build_settings(&block)
           new.tap { |dsl| dsl.instance_eval(&block) }.settings
         end
 

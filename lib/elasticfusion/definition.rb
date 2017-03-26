@@ -11,9 +11,7 @@ module Elasticfusion
       include Elasticsearch::Model
 
       def self.elasticfusion(&block)
-        @elasticfusion ||= Model::Settings.new(self)
-        @elasticfusion.configure_with_block(&block) if block_given?
-        @elasticfusion
+        @elasticfusion ||= Model::Settings.new(self, &block)
       end
     end
 
