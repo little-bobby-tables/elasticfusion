@@ -23,18 +23,6 @@ module Elasticfusion
       end
     end
 
-    class UnknownSortFieldError < SearchError
-      attr_reader :field
-
-      def initialize(field)
-        @field = field
-      end
-
-      def message
-        "\"#{field}\" is not a sortable field."
-      end
-    end
-
     class InvalidSortOrderError < SearchError
       def message
         'Invalid sort order. Accepted values: "desc" and "asc".'

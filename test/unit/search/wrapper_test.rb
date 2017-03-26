@@ -50,25 +50,6 @@ class SearchWrapperTest < ActiveSupport::TestCase
     assert_includes terms, term: { tags: 'peridot' }
   end
 
-  test ':allowed_sort_fields' do
-    model { allowed_sort_fields [:stars] }
-
-    sorts = search_body('pearl') { |s| s.sort_by('stars', 'desc') }[:sort]
-    assert_includes sorts, 'stars' => 'desc'
-
-    sorts = search_body('pearl') { |s| s.sort_by(:stars, :desc) }[:sort]
-    assert_includes sorts, stars: :desc
-
-    e = assert_raises Elasticfusion::Search::UnknownSortFieldError do
-      search_body('pearl') { |s| s.sort_by('decidedly_not_stars', 'desc') }
-    end
-    assert_equal 'decidedly_not_stars', e.field
-
-    assert_raises Elasticfusion::Search::InvalidSortOrderError do
-      search_body('pearl') { |s| s.sort_by('stars', 'spiraling') }
-    end
-  end
-
   def search_body(query = nil, &block)
     s = Elasticfusion::Search::Wrapper.new(@model, query, &block)
     s.elasticsearch_payload(size: nil, from: nil)

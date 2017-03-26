@@ -46,10 +46,6 @@ module Elasticfusion
           settings[:searchable_fields] = ary
         end
 
-        def allowed_sort_fields(ary)
-          settings[:allowed_sort_fields] = ary.map(&:to_s)
-        end
-
         def default_query(query)
           settings[:default_query] = query
         end

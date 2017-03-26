@@ -3,10 +3,9 @@ module Elasticfusion
   module Search
     class Builder
       def initialize(settings)
-        @scopes              = settings[:scopes]              || {}
-        @default_query       = settings[:default_query]       || { match_all: {} }
-        @default_sort        = settings[:default_sort]        || {}
-        @allowed_sort_fields = settings[:allowed_sort_fields] || []
+        @scopes        = settings[:scopes]        || {}
+        @default_query = settings[:default_query] || { match_all: {} }
+        @default_sort  = settings[:default_sort]  || {}
 
         @queries = []
         @filters = []
@@ -31,7 +30,6 @@ module Elasticfusion
       end
 
       def sort_by(field, direction)
-        raise Search::UnknownSortFieldError, field if @allowed_sort_fields.exclude? field.to_s
         raise Search::InvalidSortOrderError if %w(desc asc).exclude? direction.to_s
         @sorts << { field => direction }
       end
