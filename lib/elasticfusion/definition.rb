@@ -17,8 +17,8 @@ module Elasticfusion
 
     cls.class_eval(&block)
 
-    # Model extensions may rely on settings set with a block,
-    # include them after evaluating the latter.
+    # Model extensions may rely on settings set with the block
+    # and should only be included after evaluating it.
     cls.class_eval do
       include Model::Indexing
       include Model::Searching
