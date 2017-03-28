@@ -10,21 +10,18 @@ module Elasticfusion
         @settings = DSL.build_settings(&block) if block_given?
         @settings ||= {}
 
-        @settings[:full_mapping] = full_mapping
         @settings[:searchable_mapping] = searchable_mapping
         @settings[:searchable_fields] ||= @settings[:searchable_mapping].keys
       end
 
-      def full_mapping
-        @model.__elasticsearch__.mapping.to_hash[
-          @model.__elasticsearch__.document_type.to_sym][:properties]
-      end
-
       def searchable_mapping
+        mapping = @model.__elasticsearch__.mapping.to_hash[
+          @model.__elasticsearch__.document_type.to_sym][:properties]
+
         if @settings[:searchable_fields]
-          full_mapping.select { |field, _| @settings[:searchable_fields].include? field }
+          mapping.select { |field, _| @settings[:searchable_fields].include? field }
         else
-          full_mapping
+          mapping
         end
       end
 

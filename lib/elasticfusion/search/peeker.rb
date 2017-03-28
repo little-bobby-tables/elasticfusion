@@ -8,9 +8,8 @@ module Elasticfusion
     # Under the hood, it uses search_after parameters (see
     # https://www.elastic.co/guide/en/elasticsearch/reference/5.2/search-request-search-after.html).
     class Peeker
-      def initialize(wrapper, full_mapping)
+      def initialize(wrapper)
         @wrapper = wrapper
-        @full_mapping = full_mapping
       end
 
       def next_record(current_record)
@@ -35,8 +34,8 @@ module Elasticfusion
         request[:search_after] = request[:sort].map do |sort_hash|
           field, _direction = sort_hash.first
 
-          if @full_mapping[field.to_sym][:type] == 'date'
-            ms_since_epoch = (Time.parse(indexed[field]).to_f * 1000).to_i
+          if indexed[field].is_a? Time
+            ms_since_epoch = (indexed[field].to_f * 1000).to_i
             ms_since_epoch
           else
             indexed[field]

@@ -14,7 +14,6 @@ module Elasticfusion
       def initialize(model, query, &block)
         @search_runner      = model.method(:search)
 
-        @full_mapping       = model.elasticfusion[:full_mapping]
         @searchable_mapping = model.elasticfusion[:searchable_mapping]
         @searchable_fields  = model.elasticfusion[:searchable_fields]
         @keyword_field      = model.elasticfusion[:keyword_field]
@@ -41,7 +40,7 @@ module Elasticfusion
       end
 
       def peeker
-        Peeker.new(self, @full_mapping)
+        Peeker.new(self)
       end
 
       private

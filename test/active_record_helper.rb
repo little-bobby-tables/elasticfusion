@@ -49,7 +49,7 @@ def tags_stars_date_model(&block)
         id: id,
         tags: JSON.parse(tags), # SQLite doesn't handle arrays natively
         stars: stars,
-        date: date.iso8601
+        date: date
       }
     end
 

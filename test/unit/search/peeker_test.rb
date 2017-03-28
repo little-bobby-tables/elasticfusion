@@ -116,8 +116,9 @@ class SearchPeekerTest < ActiveSupport::TestCase
   def generate_records(unique_stars: true)
     @records = @model.create [
       { tags: %w(ruby sapphire), stars: 20, date: 7.day.ago },
-      { tags: %w(ruby sapphire), stars: (if unique_stars then 21 else 20 end), date: 5.days.ago - 1.hour },
-      { tags: %w(ruby sapphire), stars: (if unique_stars then 22 else 21 end), date: 5.days.ago - 1.second },
+      { tags: %w(ruby sapphire), stars: (if unique_stars then 21 else 20 end), date: 5.days.ago - 1.minute },
+      # The next record is important - it tests millisecond differences that may affect search order.
+      { tags: %w(ruby sapphire), stars: (if unique_stars then 22 else 21 end), date: 5.days.ago - (1.2).seconds },
       { tags: %w(ruby sapphire), stars: (if unique_stars then 23 else 21 end), date: 10.minutes.ago },
       { tags: %w(ruby sapphire), stars: (if unique_stars then 24 else 22 end), date: 1.minute.ago }
     ]
