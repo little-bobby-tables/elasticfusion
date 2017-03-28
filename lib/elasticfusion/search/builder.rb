@@ -34,6 +34,12 @@ module Elasticfusion
         @sorts << { field => direction }
       end
 
+      # An explicit setter for sort order tiebreaker.
+      # Makes the purpose of the code that uses it more clear, otherwise is identical to +sort_by+.
+      def ensure_deterministic_order_with_unique_field(field)
+        @sorts << { field => :desc }
+      end
+
       # Attribute readers
 
       def queries
