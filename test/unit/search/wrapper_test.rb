@@ -34,13 +34,13 @@ class SearchWrapperTest < ActiveSupport::TestCase
 
     terms = search_request('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
     assert_includes terms, term: { stars: '50' }
-    refute_includes terms, term: { date: '2016-12-01T12:00:00+07:00' }
+    refute_includes terms, term: { date: Time.new(2016, 12, 1, 12).iso8601 }
 
     @model = tags_stars_date_model { searchable_fields [:date] }
 
     terms = search_request('stars: 50, date: december 1 2016')[:query][:bool][:filter].first[:bool][:must]
     refute_includes terms, term: { stars: '50' }
-    assert_includes terms, term: { date: '2016-12-01T12:00:00+07:00' }
+    assert_includes terms, term: { date: Time.new(2016, 12, 1, 12).iso8601 }
   end
 
   test ':keyword_field' do
