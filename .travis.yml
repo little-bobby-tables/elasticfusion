@@ -2,15 +2,9 @@ dist: trusty
 
 sudo: false
 
-language: ruby
+rvm: 2.4.1
 
-cache:
-  - bundler
-
-matrix:
-  include:
-    - rvm: 2.4.1
-      jdk: openjdk8
+jdk: openjdk8
 
 env:
   - ES_VERSION=5.3.1 ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}.tar.gz
@@ -20,6 +14,9 @@ install:
   - tar -xzf elasticsearch-${ES_VERSION}.tar.gz
   - ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
   - bundle install
+
+cache:
+  - bundler
 
 after_success:
   - bundle exec codeclimate-test-reporter
