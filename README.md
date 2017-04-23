@@ -1,5 +1,9 @@
 # Elasticfusion
 
+[![Build Status](https://travis-ci.org/little-bobby-tables/elasticfusion.svg?branch=master)](https://travis-ci.org/little-bobby-tables/elasticfusion)
+[![Test Coverage](https://codeclimate.com/github/little-bobby-tables/elasticfusion/badges/coverage.svg)](https://codeclimate.com/github/little-bobby-tables/elasticfusion/coverage)
+[![Gem Version](https://badge.fury.io/rb/elasticfusion.svg)](https://badge.fury.io/rb/elasticfusion)
+
 Elasticfusion provides additional functionality on top of [*elasticsearch-rails*](https://github.com/elastic/elasticsearch-rails).
 
 It includes:
