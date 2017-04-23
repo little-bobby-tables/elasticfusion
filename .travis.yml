@@ -19,6 +19,7 @@ install:
   - wget ${ES_DOWNLOAD_URL}
   - tar -xzf elasticsearch-${ES_VERSION}.tar.gz
   - ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
+  - bundle install
 
 after_success:
   - bundle exec codeclimate-test-reporter
